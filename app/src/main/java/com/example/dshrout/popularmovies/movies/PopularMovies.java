@@ -22,12 +22,6 @@ public class PopularMovies {
     public ArrayList<Movie> GetMovies(String sortBy, String sortOrder, String apikey) {
         String urlString;
 
-        if(!sortBy.toLowerCase().equals("user rating"))
-            sortBy = "popularity";
-
-        if(!sortOrder.toLowerCase().equals("asc"))
-            sortOrder = "desc";
-
         urlString = "http://api.themoviedb.org/3/discover/movie?" +
                     "sort_by=" + sortBy + "." + sortOrder +
                     "&api_key=" + apikey;

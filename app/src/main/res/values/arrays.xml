@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_sortby_entries">
+        <item>Popularity</item>
+        <item>User Votes</item>
+    </string-array>
+    <string-array name="pref_sortby_values">
+        <item>popularity</item>
+        <item>vote_average</item>
+    </string-array>
+
+    <string-array name="pref_sortorder_entries">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+    <string-array name="pref_sortorder_values">
+        <item>asc</item>
+        <item>desc</item>
+    </string-array>
+</resources>

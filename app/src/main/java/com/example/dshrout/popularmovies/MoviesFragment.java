@@ -1,8 +1,10 @@
 package com.example.dshrout.popularmovies;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,18 @@ public class MoviesFragment extends Fragment {
     private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e";
 
     public MoviesFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateMovieCards();
     }
 
     @Override
@@ -55,7 +69,10 @@ public class MoviesFragment extends Fragment {
         @Override
         protected ArrayList<Movie> doInBackground(Void... params) {
             PopularMovies popMovies = new PopularMovies();
-            return popMovies.GetMovies("popularity", "desc", TMDB_API_KEY);
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String sortBy = sharedPrefs.getString(getString(R.string.pref_sortby_key), getString(R.string.pref_sortby_default));
+            String sortOrder = sharedPrefs.getString(getString(R.string.pref_sortorder_key), getString(R.string.pref_sortorder_default));
+            return popMovies.GetMovies(sortBy, sortOrder, TMDB_API_KEY);
         }
     }
 }
