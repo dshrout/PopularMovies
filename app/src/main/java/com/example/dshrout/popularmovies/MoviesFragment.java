@@ -8,12 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.example.dshrout.popularmovies.movies.Movie;
+import com.example.dshrout.popularmovies.movies.PopularMovies;
+
+import java.util.ArrayList;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MoviesFragment extends Fragment {
     private ImageAdapter mMovieCardsAdapter;
+    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e";
 
     public MoviesFragment() {
     }
@@ -28,6 +34,7 @@ public class MoviesFragment extends Fragment {
 
         // attach adapter to view
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
+        // if I sleep here for even just a half a second, it works.
         gridView.setAdapter(mMovieCardsAdapter);
         return rootView;
     }
@@ -36,24 +43,19 @@ public class MoviesFragment extends Fragment {
         new GetMovieCardsTask().execute();
     }
 
-    public class GetMovieCardsTask extends AsyncTask<Void, Void, String[]> {
+    public class GetMovieCardsTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
         @Override
-        protected void onPostExecute(String[] imageUrls) {
+        protected void onPostExecute(ArrayList<Movie> imageUrls) {
             super.onPostExecute(imageUrls);
             mMovieCardsAdapter.clear();
             mMovieCardsAdapter.addAll(imageUrls);
+            mMovieCardsAdapter.notifyDataSetChanged();
         }
 
         @Override
-        protected String[] doInBackground(Void... params) {
-            return new String[] {
-                    "http://i.imgur.com/lfqsFELb.jpg",
-                    "http://i.imgur.com/ipzUCGub.jpg",
-                    "http://i.imgur.com/KGl97Wsb.jpg",
-                    "http://i.imgur.com/R4cy166b.jpg",
-                    "http://i.imgur.com/U4LFtL6b.jpg",
-                    "http://i.imgur.com/ilmNYmKb.jpg"
-            };
+        protected ArrayList<Movie> doInBackground(Void... params) {
+            PopularMovies popMovies = new PopularMovies();
+            return popMovies.GetMovies("popularity", "desc", TMDB_API_KEY);
         }
     }
 }

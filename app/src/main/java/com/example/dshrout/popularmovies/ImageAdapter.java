@@ -6,13 +6,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.example.dshrout.popularmovies.movies.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-/**
- * Created by DShrout on 7/21/2015.
- */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<String> mImageUrls;
@@ -24,14 +23,21 @@ public class ImageAdapter extends BaseAdapter {
 
     public boolean add(String url) {
         mImageUrls.add(url);
-        return true; // TODO: add error handling
+        return true;
     }
 
     public boolean addAll(String[] urls) {
-        for(int i = 0; i < urls.length; ++i) {
-            mImageUrls.add(urls[i]);
+        Collections.addAll(mImageUrls, urls);
+        return true;
+    }
+
+    public boolean addAll(ArrayList<Movie> movies) {
+        for(int i = 0; i < movies.size(); ++i) {
+            String url;
+            url =  "http://image.tmdb.org/t/p/w342/" + movies.get(i).getPosterPath();
+            mImageUrls.add(url);
         }
-        return true; // TODO: add error handling
+        return true;
     }
 
     public void clear() {
