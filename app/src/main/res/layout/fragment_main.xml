@@ -10,29 +10,5 @@
     android:gravity="center"
     android:verticalSpacing="0dp"
     android:horizontalSpacing="0dp"
+    android:fastScrollEnabled="true"
 />
-
-<!--
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivityFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <ListView
-        android:id="@+id/listview_movies"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
-&lt;!&ndash;
-    <GridView
-        android:id="@+id/gridview_movies"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="auto_fit"
-    />
-&ndash;&gt;
-</FrameLayout>
--->

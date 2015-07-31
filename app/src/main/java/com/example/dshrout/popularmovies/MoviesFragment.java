@@ -44,12 +44,17 @@ public class MoviesFragment extends Fragment {
 
         // Create a list to hold the movie cards and load it
         mMovieCardsAdapter = new ImageAdapter(getActivity());
-        updateMovieCards();
+        //updateMovieCards();
 
         // attach adapter to view
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
-        // if I sleep here for even just a half a second, it works.
         gridView.setAdapter(mMovieCardsAdapter);
+/*
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            String
+        });
+*/
+
         return rootView;
     }
 
@@ -59,10 +64,10 @@ public class MoviesFragment extends Fragment {
 
     public class GetMovieCardsTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
         @Override
-        protected void onPostExecute(ArrayList<Movie> imageUrls) {
-            super.onPostExecute(imageUrls);
+        protected void onPostExecute(ArrayList<Movie> movies) {
+            super.onPostExecute(movies);
             mMovieCardsAdapter.clear();
-            mMovieCardsAdapter.addAll(imageUrls);
+            mMovieCardsAdapter.addAll(movies);
             mMovieCardsAdapter.notifyDataSetChanged();
         }
 

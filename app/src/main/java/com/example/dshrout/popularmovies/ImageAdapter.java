@@ -14,44 +14,45 @@ import java.util.Collections;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<String> mImageUrls;
+    private ArrayList<Movie> mMovies;
 
     public ImageAdapter(Context c) {
         mContext = c;
-        mImageUrls = new ArrayList<>();
+        mMovies = new ArrayList<>();
     }
 
-    public boolean add(String url) {
-        mImageUrls.add(url);
+    public boolean add(Movie movie) {
+        mMovies.add(movie);
         return true;
     }
 
-    public boolean addAll(String[] urls) {
-        Collections.addAll(mImageUrls, urls);
+    public boolean addAll(Movie[] movies) {
+        Collections.addAll(mMovies, movies);
         return true;
     }
 
     public boolean addAll(ArrayList<Movie> movies) {
-        for(int i = 0; i < movies.size(); ++i) {
+        /*for(int i = 0; i < movies.size(); ++i) {
             String url;
             url =  "http://image.tmdb.org/t/p/w342/" + movies.get(i).getPosterPath();
-            mImageUrls.add(url);
-        }
+            mMovies.add(url);
+        } */
+        mMovies.addAll(movies);
         return true;
     }
 
     public void clear() {
-        mImageUrls.clear();
+        mMovies.clear();
     }
 
     @Override
     public int getCount() {
-        return mImageUrls.size();
+        return mMovies.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mMovies.get(position);
     }
 
     @Override
@@ -68,7 +69,12 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView)convertView;
         }
 
-        Picasso.with(mContext).load(mImageUrls.get(position)).into(imageView);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        if(mMovies.get(position).getPosterPath() != "")
+            Picasso.with(mContext).load(mMovies.get(position).getPosterPath()).into(imageView);
+        else
+            imageView.setImageResource(R.drawable.sample_2);
+
         return imageView;
     }
 }

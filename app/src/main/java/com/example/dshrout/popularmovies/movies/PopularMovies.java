@@ -86,14 +86,16 @@ public class PopularMovies {
                 JSONObject jsonObject = jsonMovies.getJSONObject(i);
                 movie = new Movie();
                 movie.setId(jsonObject.optString("id"));
-                movie.setPosterPath(jsonObject.optString("poster_path"));
+                movie.setTitle(jsonObject.optString("title"));
+                movie.setReleaseDate(jsonObject.optString("release_date"));
+                movie.setVoterAverage(jsonObject.optString("vote_average"));
+                movie.setPosterPath("http://image.tmdb.org/t/p/w342/" + jsonObject.optString("poster_path"));
+                movie.setBackdropPath("http://image.tmdb.org/t/p/w342/" + jsonObject.optString("backdrop_path"));
+                movie.setSummary(jsonObject.optString("overview"));
                 movies.add(movie);
-                if(i==19) {
-                    break;
-                }
             }
-
             return movies;
+
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
