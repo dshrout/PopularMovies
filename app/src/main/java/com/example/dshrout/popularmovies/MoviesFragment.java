@@ -1,6 +1,7 @@
 package com.example.dshrout.popularmovies;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.dshrout.popularmovies.movies.Movie;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
  */
 public class MoviesFragment extends Fragment {
     private ImageAdapter mMovieCardsAdapter;
-    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e";
 
     public MoviesFragment() {
     }
@@ -49,11 +50,17 @@ public class MoviesFragment extends Fragment {
         // attach adapter to view
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(mMovieCardsAdapter);
-/*
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            String
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie movie = (Movie) mMovieCardsAdapter.getItem(position);
+                if (movie != null) {
+                    Intent displayMovieDetails = new Intent(MoviesFragment.this.getActivity(), MovieDetailsActivity.class);
+                    displayMovieDetails.putExtra(Intent.EXTRA_TEXT, movie.getId());
+                    MoviesFragment.this.startActivity(displayMovieDetails);
+                }
+            }
         });
-*/
 
         return rootView;
     }
@@ -77,7 +84,7 @@ public class MoviesFragment extends Fragment {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String sortBy = sharedPrefs.getString(getString(R.string.pref_sortby_key), getString(R.string.pref_sortby_default));
             String sortOrder = sharedPrefs.getString(getString(R.string.pref_sortorder_key), getString(R.string.pref_sortorder_default));
-            return popMovies.GetMovies(sortBy, sortOrder, TMDB_API_KEY);
+            return popMovies.GetMovies(sortBy, sortOrder);
         }
     }
 }

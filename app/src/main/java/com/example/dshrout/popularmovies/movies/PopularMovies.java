@@ -16,15 +16,27 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PopularMovies {
+    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e";
+    private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
+    private final String TMDB_BASE_URL = "http://api.themoviedb.org/3/";
+
     public PopularMovies () {
     }
 
-    public ArrayList<Movie> GetMovies(String sortBy, String sortOrder, String apikey) {
-        String urlString;
+    public Movie GetMovie(String movieId) {
+        String urlString = TMDB_BASE_URL + "movie/" + movieId + "?api_key=" + TMDB_API_KEY;
+        return GetMovieData(urlString).get(0);
+    }
 
-        urlString = "http://api.themoviedb.org/3/discover/movie?" +
-                    "sort_by=" + sortBy + "." + sortOrder +
-                    "&api_key=" + apikey;
+    public ArrayList<Movie> GetMovies(String sortBy, String sortOrder) {
+        String urlString = TMDB_BASE_URL + "discover/movie?" +
+                "sort_by=" + sortBy + "." + sortOrder +
+                "&api_key=" + TMDB_API_KEY;
+
+        return GetMovieData(urlString);
+    }
+
+    public ArrayList<Movie> GetMovieData(String urlString) {
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -55,9 +67,12 @@ public class PopularMovies {
             }
 
             moviesJsonStr = buffer.toString();
-            return parseMoviesData(moviesJsonStr);
+            return parseMovieData(moviesJsonStr);
 
         } catch (IOException e) {
+            Log.e("GetMovies", "Error ", e);
+            return null;
+        } catch (Exception e) {
             Log.e("GetMovies", "Error ", e);
             return null;
         } finally {
@@ -75,29 +90,47 @@ public class PopularMovies {
     }
 
     @Nullable
-    private ArrayList<Movie> parseMoviesData(String moviesData) {
+    private ArrayList<Movie> parseMovieData(String movieData) {
         try {
-            JSONObject jsonMoviesData = new JSONObject(moviesData);
-            JSONArray jsonMovies = jsonMoviesData.optJSONArray("results");
-            ArrayList<Movie> movies = new ArrayList<>();
             Movie movie;
-
-            for(int i=0; i < jsonMovies.length(); i++){
-                JSONObject jsonObject = jsonMovies.getJSONObject(i);
+            ArrayList<Movie> movies = new ArrayList<>();
+            JSONObject jsonMovieData = new JSONObject(movieData);
+            if (jsonMovieData.has("results")) {
+                JSONArray jsonMovies = jsonMovieData.optJSONArray("results");
+                for(int i=0; i < jsonMovies.length(); i++){
+                    JSONObject jsonObject = jsonMovies.getJSONObject(i);
+                    movie = new Movie();
+                    movie.setId(jsonObject.optString("id"));
+                    movie.setTitle(jsonObject.optString("title"));
+                    movie.setReleaseDate(jsonObject.optString("release_date"));
+                    movie.setRuntime(jsonObject.optString("runtime"));
+                    movie.setVoterAverage(jsonObject.optString("vote_average"));
+                    if (jsonObject.optString("poster_path").length()>0 && !jsonObject.optString("poster_path").equals("null"))
+                        movie.setPosterPath(TMDB_IMAGE_PATH + jsonObject.optString("poster_path"));
+                    if (jsonObject.optString("backdrop_path").length()>0 && !jsonObject.optString("backdrop_path").equals("null"))
+                        movie.setBackdropPath(TMDB_IMAGE_PATH + jsonObject.optString("backdrop_path"));
+                    movie.setSummary(jsonObject.optString("overview"));
+                    movies.add(movie);
+                }
+            } else {
                 movie = new Movie();
-                movie.setId(jsonObject.optString("id"));
-                movie.setTitle(jsonObject.optString("title"));
-                movie.setReleaseDate(jsonObject.optString("release_date"));
-                movie.setVoterAverage(jsonObject.optString("vote_average"));
-                movie.setPosterPath("http://image.tmdb.org/t/p/w342/" + jsonObject.optString("poster_path"));
-                movie.setBackdropPath("http://image.tmdb.org/t/p/w342/" + jsonObject.optString("backdrop_path"));
-                movie.setSummary(jsonObject.optString("overview"));
+                movie.setId(jsonMovieData.optString("id"));
+                movie.setTitle(jsonMovieData.optString("title"));
+                movie.setReleaseDate(jsonMovieData.optString("release_date"));
+                movie.setRuntime(jsonMovieData.optString("runtime"));
+                movie.setVoterAverage(jsonMovieData.optString("vote_average"));
+                if (jsonMovieData.optString("poster_path").length()>0 && !jsonMovieData.optString("poster_path").equals("null"))
+                    movie.setPosterPath(TMDB_IMAGE_PATH + jsonMovieData.optString("poster_path"));
+                if (jsonMovieData.optString("backdrop_path").length()>0 && !jsonMovieData.optString("backdrop_path").equals("null"))
+                    movie.setBackdropPath(TMDB_IMAGE_PATH + jsonMovieData.optString("backdrop_path"));
+                movie.setSummary(jsonMovieData.optString("overview"));
                 movies.add(movie);
             }
+
             return movies;
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("parseMovieData", "JSON Exception", e);
             return null;
         }
     }

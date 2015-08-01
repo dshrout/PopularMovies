@@ -10,5 +10,6 @@
     <string name="pref_sortorder_label">Sort Order</string>
     <string name="pref_sortorder_key">sortorder</string>
     <string name="pref_sortorder_default">desc</string>
-    <string name="title_activity_movie_details">MovieDetailsActivity</string>
+    <string name="title_activity_movie_details">Movie Details</string>
+    <string name="content_desc_movie_details">Movie Poster</string>
 </resources>

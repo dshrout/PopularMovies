@@ -4,12 +4,24 @@ public class Movie {
     private String mId;
     private String mTitle;
     private String mReleaseDate;
+    private String mRuntime;
+    private String mBudget;
     private String mVoterAverage;
     private String mPosterPath;
     private String mBackdropPath;
     private String mSummary;
 
-    public Movie(){}
+    public Movie(){
+        mId = "";
+        mTitle = "";
+        mReleaseDate = "";
+        mRuntime = "";
+        mBudget = "";
+        mVoterAverage = "";
+        mPosterPath = "";
+        mBackdropPath = "";
+        mSummary = "";
+    }
 
     public String getId() {return mId;}
     public void setId(String id) {
@@ -24,6 +36,16 @@ public class Movie {
     public String getReleaseDate() {return mReleaseDate;}
     public void setReleaseDate(String date) {
         mReleaseDate = (date != null ? date : "");
+    }
+
+    public String getRuntime() {return mRuntime;}
+    public void setRuntime(String runtime) {
+        mRuntime = (runtime != null ? runtime : "");
+    }
+
+    public String getBudget() {return mBudget;}
+    public void setBudget(String budget) {
+        mBudget = (budget != null ? budget : "");
     }
 
     public String getVoterAverage() {return mVoterAverage;}
