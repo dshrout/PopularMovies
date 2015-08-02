@@ -73,7 +73,7 @@ public class ImageAdapter extends BaseAdapter {
         if(mMovies.get(position).getPosterPath() != "")
             Picasso.with(mContext).load(mMovies.get(position).getPosterPath()).into(imageView);
         else
-            imageView.setImageResource(R.drawable.sample_2);
+            imageView.setImageResource(R.drawable.no_image_found);
 
         return imageView;
     }

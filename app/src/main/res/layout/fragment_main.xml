@@ -10,5 +10,4 @@
     android:gravity="center"
     android:verticalSpacing="0dp"
     android:horizontalSpacing="0dp"
-    android:fastScrollEnabled="true"
 />

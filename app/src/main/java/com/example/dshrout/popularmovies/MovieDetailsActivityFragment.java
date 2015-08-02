@@ -74,6 +74,8 @@ public class MovieDetailsActivityFragment extends Fragment {
             title.setText(mMovieDetails.getTitle());
         if (mMovieDetails.getPosterPath().length()>0)
             Picasso.with(getActivity()).load(mMovieDetails.getPosterPath()).into(poster);
+        else
+            poster.setImageResource(R.drawable.no_image_found);
         if (mMovieDetails.getReleaseDate().length()>0)
             date.setText(mMovieDetails.getReleaseDate().trim().substring(0, 4));
         if (mMovieDetails.getRuntime().length()>0)

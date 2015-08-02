@@ -90,7 +90,7 @@
             <TextView android:id="@+id/moviedetail_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/moviedetail_userrating"
+                android:layout_below="@id/moviedetail_poster"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
