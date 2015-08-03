@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.dshrout.popularmovies.movies.Movie;
+import com.example.dshrout.popularmovies.movies.MovieCard;
 import com.example.dshrout.popularmovies.movies.PopularMovies;
 
 import java.util.ArrayList;
@@ -36,16 +36,17 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateMovieCards();
+        if (mMovieCardsAdapter != null)
+            updateMovieCards();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Create a list to hold the movie cards and load it
+        // Create a list to hold the movie cards then update it
         mMovieCardsAdapter = new ImageAdapter(getActivity());
-        //updateMovieCards();
+        updateMovieCards();
 
         // attach adapter to view
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
@@ -53,10 +54,10 @@ public class MoviesFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Movie movie = (Movie) mMovieCardsAdapter.getItem(position);
-                if (movie != null) {
+                MovieCard movieCard = (MovieCard) mMovieCardsAdapter.getItem(position);
+                if (movieCard != null) {
                     Intent displayMovieDetails = new Intent(MoviesFragment.this.getActivity(), MovieDetailsActivity.class);
-                    displayMovieDetails.putExtra(Intent.EXTRA_TEXT, movie.getId());
+                    displayMovieDetails.putExtra(Intent.EXTRA_TEXT, movieCard.getId());
                     MoviesFragment.this.startActivity(displayMovieDetails);
                 }
             }
@@ -69,9 +70,9 @@ public class MoviesFragment extends Fragment {
         new GetMovieCardsTask().execute();
     }
 
-    public class GetMovieCardsTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
+    public class GetMovieCardsTask extends AsyncTask<Void, Void, ArrayList<MovieCard>> {
         @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
+        protected void onPostExecute(ArrayList<MovieCard> movies) {
             super.onPostExecute(movies);
             mMovieCardsAdapter.clear();
             mMovieCardsAdapter.addAll(movies);
@@ -79,7 +80,7 @@ public class MoviesFragment extends Fragment {
         }
 
         @Override
-        protected ArrayList<Movie> doInBackground(Void... params) {
+        protected ArrayList<MovieCard> doInBackground(Void... params) {
             PopularMovies popMovies = new PopularMovies();
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String sortBy = sharedPrefs.getString(getString(R.string.pref_sortby_key), getString(R.string.pref_sortby_default));

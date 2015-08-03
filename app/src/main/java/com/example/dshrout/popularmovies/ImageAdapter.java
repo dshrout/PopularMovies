@@ -6,37 +6,33 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.example.dshrout.popularmovies.movies.Movie;
+import com.example.dshrout.popularmovies.movies.MovieCard;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<Movie> mMovies;
+    private ArrayList<MovieCard> mMovies;
 
     public ImageAdapter(Context c) {
         mContext = c;
         mMovies = new ArrayList<>();
     }
 
-    public boolean add(Movie movie) {
-        mMovies.add(movie);
+    public boolean add(MovieCard movieCard) {
+        mMovies.add(movieCard);
         return true;
     }
 
-    public boolean addAll(Movie[] movies) {
+    public boolean addAll(MovieCard[] movies) {
         Collections.addAll(mMovies, movies);
         return true;
     }
 
-    public boolean addAll(ArrayList<Movie> movies) {
-        /*for(int i = 0; i < movies.size(); ++i) {
-            String url;
-            url =  "http://image.tmdb.org/t/p/w342/" + movies.get(i).getPosterPath();
-            mMovies.add(url);
-        } */
+    public boolean addAll(ArrayList<MovieCard> movies) {
         mMovies.addAll(movies);
         return true;
     }

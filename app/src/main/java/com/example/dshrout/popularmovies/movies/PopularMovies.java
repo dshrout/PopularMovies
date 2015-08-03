@@ -3,6 +3,8 @@ package com.example.dshrout.popularmovies.movies;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.dshrout.popularmovies.movies.MovieCard;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,19 +18,19 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PopularMovies {
-    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e";
+    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e"; // TODO: remove this key before publishing to github
     private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
     private final String TMDB_BASE_URL = "http://api.themoviedb.org/3/";
 
     public PopularMovies () {
     }
 
-    public Movie GetMovie(String movieId) {
+    public MovieCard GetMovie(String movieId) {
         String urlString = TMDB_BASE_URL + "movie/" + movieId + "?api_key=" + TMDB_API_KEY;
         return GetMovieData(urlString).get(0);
     }
 
-    public ArrayList<Movie> GetMovies(String sortBy, String sortOrder) {
+    public ArrayList<MovieCard> GetMovies(String sortBy, String sortOrder) {
         String urlString = TMDB_BASE_URL + "discover/movie?" +
                 "sort_by=" + sortBy + "." + sortOrder +
                 "&api_key=" + TMDB_API_KEY;
@@ -36,7 +38,7 @@ public class PopularMovies {
         return GetMovieData(urlString);
     }
 
-    public ArrayList<Movie> GetMovieData(String urlString) {
+    public ArrayList<MovieCard> GetMovieData(String urlString) {
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -70,10 +72,10 @@ public class PopularMovies {
             return parseMovieData(moviesJsonStr);
 
         } catch (IOException e) {
-            Log.e("GetMovies", "Error ", e);
+            Log.e("PopularMovies_GetMovieData", "Error ", e);
             return null;
         } catch (Exception e) {
-            Log.e("GetMovies", "Error ", e);
+            Log.e("PopularMovies_GetMovieData", "Error ", e);
             return null;
         } finally {
             if (urlConnection != null) {
@@ -83,23 +85,23 @@ public class PopularMovies {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e("GetMovies", "Error closing stream", e);
+                    Log.e("PopularMovies_GetMovieData", "Error closing stream", e);
                 }
             }
         }
     }
 
     @Nullable
-    private ArrayList<Movie> parseMovieData(String movieData) {
+    private ArrayList<MovieCard> parseMovieData(String movieData) {
         try {
-            Movie movie;
-            ArrayList<Movie> movies = new ArrayList<>();
+            MovieCard movie;
+            ArrayList<MovieCard> movies = new ArrayList<>();
             JSONObject jsonMovieData = new JSONObject(movieData);
             if (jsonMovieData.has("results")) {
                 JSONArray jsonMovies = jsonMovieData.optJSONArray("results");
                 for(int i=0; i < jsonMovies.length(); i++){
                     JSONObject jsonObject = jsonMovies.getJSONObject(i);
-                    movie = new Movie();
+                    movie = new MovieCard();
                     movie.setId(jsonObject.optString("id"));
                     movie.setTitle(jsonObject.optString("title"));
                     movie.setReleaseDate(jsonObject.optString("release_date"));
@@ -113,7 +115,7 @@ public class PopularMovies {
                     movies.add(movie);
                 }
             } else {
-                movie = new Movie();
+                movie = new MovieCard();
                 movie.setId(jsonMovieData.optString("id"));
                 movie.setTitle(jsonMovieData.optString("title"));
                 movie.setReleaseDate(jsonMovieData.optString("release_date"));
@@ -130,7 +132,7 @@ public class PopularMovies {
             return movies;
 
         } catch (JSONException e) {
-            Log.e("parseMovieData", "JSON Exception", e);
+            Log.e("PopularMovies_parseMovieData", "JSON Exception", e);
             return null;
         }
     }

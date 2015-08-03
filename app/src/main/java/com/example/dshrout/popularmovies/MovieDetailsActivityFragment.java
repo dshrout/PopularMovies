@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.dshrout.popularmovies.movies.Movie;
+import com.example.dshrout.popularmovies.movies.MovieCard;
 import com.example.dshrout.popularmovies.movies.PopularMovies;
 import com.squareup.picasso.Picasso;
 
@@ -20,28 +19,10 @@ import com.squareup.picasso.Picasso;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailsActivityFragment extends Fragment {
-    private Movie mMovieDetails;
+    private MovieCard mMovieDetails;
     private View mRootView;
 
     public MovieDetailsActivityFragment() {
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        String movieId;
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            try {
-                // get the movie id from the intent
-                movieId = intent.getExtras().getString(Intent.EXTRA_TEXT);
-                // new up and populate our movie details
-                mMovieDetails = new Movie();
-                getMovieDetails(movieId);
-            } catch (Exception e) {
-                Log.e("GetMovies", "Error ", e);
-            }
-        }
     }
 
     @Override
@@ -55,7 +36,7 @@ public class MovieDetailsActivityFragment extends Fragment {
             // get the movie id from the intent
             movieId = intent.getExtras().getString(Intent.EXTRA_TEXT);
             // new up and populate our movie details
-            mMovieDetails = new Movie();
+            mMovieDetails = new MovieCard();
             getMovieDetails(movieId);
         }
 
@@ -85,28 +66,29 @@ public class MovieDetailsActivityFragment extends Fragment {
         if (mMovieDetails.getSummary().length()>0)
             summary.setText(mMovieDetails.getSummary());
     }
+
     private void getMovieDetails(String movieId){
         new GetMovieDetailsTask().execute(movieId);
     }
 
-    public class GetMovieDetailsTask extends AsyncTask<String, Void, Movie> {
+    public class GetMovieDetailsTask extends AsyncTask<String, Void, MovieCard> {
         @Override
-        protected void onPostExecute(Movie movie) {
-            super.onPostExecute(movie);
-            mMovieDetails = movie;
+        protected void onPostExecute(MovieCard movieCard) {
+            super.onPostExecute(movieCard);
+            mMovieDetails = movieCard;
             populateLayout();
         }
 
         @Override
-        protected Movie doInBackground(String... params) {
+        protected MovieCard doInBackground(String... params) {
             PopularMovies popMovies = new PopularMovies();
             // make sure we have something to work with
             if (params.length == 0 || params[0] == "")
                 return null;
 
-            Movie movie = popMovies.GetMovie(params[0]);
+            MovieCard movieCard = popMovies.GetMovie(params[0]);
 
-            return movie;
+            return movieCard;
         }
     }
 }

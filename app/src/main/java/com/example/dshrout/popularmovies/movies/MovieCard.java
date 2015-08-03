@@ -1,6 +1,6 @@
 package com.example.dshrout.popularmovies.movies;
 
-public class Movie {
+public class MovieCard {
     private String mId;
     private String mTitle;
     private String mReleaseDate;
@@ -11,7 +11,7 @@ public class Movie {
     private String mBackdropPath;
     private String mSummary;
 
-    public Movie(){
+    public MovieCard(){
         mId = "";
         mTitle = "";
         mReleaseDate = "";
