@@ -70,10 +70,10 @@ public class PopularMovies {
             return parseMovieData(moviesJsonStr);
 
         } catch (IOException e) {
-            Log.e("PopularMovies_GetMovieData", "Error ", e);
+            Log.e("GetMovieData", "Error ", e);
             return null;
         } catch (Exception e) {
-            Log.e("PopularMovies_GetMovieData", "Error ", e);
+            Log.e("GetMovieData", "Error ", e);
             return null;
         } finally {
             if (urlConnection != null) {
@@ -83,7 +83,7 @@ public class PopularMovies {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e("PopularMovies_GetMovieData", "Error closing stream", e);
+                    Log.e("GetMovieData", "Error closing stream", e);
                 }
             }
         }
@@ -130,7 +130,7 @@ public class PopularMovies {
             return movies;
 
         } catch (JSONException e) {
-            Log.e("PopularMovies_parseMovieData", "JSON Exception", e);
+            Log.e("parseMovieData", "JSON Exception", e);
             return null;
         }
     }
