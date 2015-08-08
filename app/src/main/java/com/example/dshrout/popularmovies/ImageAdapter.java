@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.example.dshrout.popularmovies.movies.MovieCard;
+import com.example.dshrout.popularmovies.helper.MovieCard;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

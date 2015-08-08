@@ -1,4 +1,4 @@
-package com.example.dshrout.popularmovies.movies;
+package com.example.dshrout.popularmovies.helper;
 
 public class MovieCard {
     private String mId;

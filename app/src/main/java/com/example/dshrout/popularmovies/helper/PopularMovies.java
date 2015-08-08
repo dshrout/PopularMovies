@@ -1,4 +1,4 @@
-package com.example.dshrout.popularmovies.movies;
+package com.example.dshrout.popularmovies.helper;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PopularMovies {
-    private final String TMDB_API_KEY = "this is not the key you're looking for"; // TODO: remove this key before publishing to github
+    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e"; // TODO: remove this key before publishing to github
     private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
     private final String TMDB_BASE_URL = "http://api.themoviedb.org/3/";
 
@@ -63,7 +63,7 @@ public class PopularMovies {
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                return null;
+                return new ArrayList<>();
             }
 
             moviesJsonStr = buffer.toString();
@@ -71,10 +71,10 @@ public class PopularMovies {
 
         } catch (IOException e) {
             Log.e("GetMovieData", "Error ", e);
-            return null;
+            return new ArrayList<>();
         } catch (Exception e) {
             Log.e("GetMovieData", "Error ", e);
-            return null;
+            return new ArrayList<>();
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -131,7 +131,7 @@ public class PopularMovies {
 
         } catch (JSONException e) {
             Log.e("parseMovieData", "JSON Exception", e);
-            return null;
+            return new ArrayList<>();
         }
     }
 }

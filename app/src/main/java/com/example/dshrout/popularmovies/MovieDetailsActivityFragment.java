@@ -1,6 +1,9 @@
 package com.example.dshrout.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.dshrout.popularmovies.movies.MovieCard;
-import com.example.dshrout.popularmovies.movies.PopularMovies;
+import com.example.dshrout.popularmovies.helper.MovieCard;
+import com.example.dshrout.popularmovies.helper.PopularMovies;
 import com.squareup.picasso.Picasso;
 
 
@@ -72,6 +75,14 @@ public class MovieDetailsActivityFragment extends Fragment {
     }
 
     public class GetMovieDetailsTask extends AsyncTask<String, Void, MovieCard> {
+        private boolean NetworkAvailable() {
+            ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo info = connManager.getActiveNetworkInfo();
+            if (info == null) return false;
+            NetworkInfo.State network = info.getState();
+            return (network == NetworkInfo.State.CONNECTED || network == NetworkInfo.State.CONNECTING);
+        }
+
         @Override
         protected void onPostExecute(MovieCard movieCard) {
             super.onPostExecute(movieCard);
@@ -81,14 +92,17 @@ public class MovieDetailsActivityFragment extends Fragment {
 
         @Override
         protected MovieCard doInBackground(String... params) {
-            PopularMovies popMovies = new PopularMovies();
-            // make sure we have something to work with
-            if (params.length == 0 || params[0] == "")
-                return null;
+            if(NetworkAvailable()) {
+                PopularMovies popMovies = new PopularMovies();
+                // make sure we have something to work with
+                if (params.length == 0 || params[0] == "")
+                    return null;
 
-            MovieCard movieCard = popMovies.GetMovie(params[0]);
+                return popMovies.GetMovie(params[0]);
+            } else {
+                return new MovieCard();
+            }
 
-            return movieCard;
         }
     }
 }
