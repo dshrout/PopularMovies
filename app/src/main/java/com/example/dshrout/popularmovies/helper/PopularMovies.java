@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PopularMovies {
-    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e"; // TODO: remove this key before publishing to github
+    private final String TMDB_API_KEY = "this is not the key you're looking for"; // TODO: remove this key before publishing to github
     private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
     private final String TMDB_BASE_URL = "http://api.themoviedb.org/3/";
 
