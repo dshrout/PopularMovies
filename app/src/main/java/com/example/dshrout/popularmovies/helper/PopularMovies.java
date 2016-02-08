@@ -3,6 +3,9 @@ package com.example.dshrout.popularmovies.helper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.dshrout.popularmovies.data.TmdbResultPage;
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +19,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PopularMovies {
-    private final String TMDB_API_KEY = "this is not the key you're looking for"; // TODO: remove this key before publishing to github
-    private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
+    private final String TMDB_API_KEY = "bfaf98a2c85c264e97326dbadfe63a1e"; // TODO: remove this key before publishing to github
+    private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w185/";
     private final String TMDB_BASE_URL = "http://api.themoviedb.org/3/";
 
     public PopularMovies () {
@@ -67,6 +70,7 @@ public class PopularMovies {
             }
 
             moviesJsonStr = buffer.toString();
+            TmdbResultPage page = hydrateResults(moviesJsonStr);
             return parseMovieData(moviesJsonStr);
 
         } catch (IOException e) {
@@ -87,6 +91,12 @@ public class PopularMovies {
                 }
             }
         }
+    }
+
+    @Nullable
+    private TmdbResultPage hydrateResults(String jsonData) {
+        final Gson gson = new Gson();
+        return gson.fromJson(jsonData, TmdbResultPage.class);
     }
 
     @Nullable

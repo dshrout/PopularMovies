@@ -33,6 +33,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dshrout.popularmovies.MainActivity" />
         </activity>
+
+        <provider
+            android:authorities="com.example.dshrout.popularmovies.app"
+            android:name=".data.PopMoviesProvider"
+            android:enabled="true"
+            android:exported="true"
+        />
     </application>
 
 </manifest>

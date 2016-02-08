@@ -112,6 +112,7 @@ public class MoviesFragment extends Fragment {
 
         @Override
         protected ArrayList<MovieCard> doInBackground(Void... params) {
+            // TODO: Get data from database. If db is empty, and network is available, query tmdb and populate database
             if (NetworkAvailable()) {
                 PopularMovies popMovies = new PopularMovies();
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
