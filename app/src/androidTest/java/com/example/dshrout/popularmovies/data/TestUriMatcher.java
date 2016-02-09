@@ -6,13 +6,6 @@ import android.test.AndroidTestCase;
 
 /**
  * Created by DShrout on 2/8/2016.
-
- static final int POSTERS = 100;
- static final int DETAILS = 200;
- static final int DETAILS_WITH_MOVIE_ID = 201;
- static final int REVIEWS = 300;
- static final int REVIEW_WITH_MOVIE_ID = 301;
-
  */
 public class TestUriMatcher extends AndroidTestCase {
     private static final String TEST_MOVIE_ID = "23654";
