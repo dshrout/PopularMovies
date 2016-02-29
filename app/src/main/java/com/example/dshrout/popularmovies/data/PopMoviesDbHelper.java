@@ -23,34 +23,38 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_POSTERS_TABLE = "CREATE TABLE " + PosterEntry.TABLE_NAME + " (" +
                 PosterEntry._ID + " INTEGER PRIMARY KEY, " +
-                PosterEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
+                PosterEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
                 PosterEntry.COLUMN_POSTER_PATH + " TEXT, " +
                 PosterEntry.COLUMN_POPULARITY + " TEXT, " +
-                PosterEntry.COLUMN_VOTE_AVERAGE + " TEXT, " +
+                PosterEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
                 PosterEntry.COLUMN_FAVORITE + " INTEGER);";
 
         final String SQL_CREATE_DETAILS_TABLE = "CREATE TABLE " + DetailsEntry.TABLE_NAME + " (" +
                 DetailsEntry._ID + " INTEGER PRIMARY KEY, " +
-                DetailsEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
-                DetailsEntry.COLUMN_ADULT + " TEXT, " +
+                DetailsEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
+                DetailsEntry.COLUMN_ADULT + " INTEGER, " +
                 DetailsEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
                 DetailsEntry.COLUMN_GENRE_IDS + " TEXT, " +
                 DetailsEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT, " +
                 DetailsEntry.COLUMN_ORIGINAL_TITLE + " TEXT, " +
                 DetailsEntry.COLUMN_OVERVIEW + " TEXT, " +
-                DetailsEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                DetailsEntry.COLUMN_RELEASE_DATE + " TEXT, " +
                 DetailsEntry.COLUMN_TITLE + " TEXT, " +
-                DetailsEntry.COLUMN_VIDEO + " TEXT, " +
+                DetailsEntry.COLUMN_VIDEO + " INTEGER, " +
                 DetailsEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
-                DetailsEntry.COLUMN_RUNTIME + " TEXT);";
+                DetailsEntry.COLUMN_RUNTIME + " INTEGER);";
 
         final String SQL_CREATE_REVIEWS_TABLE = "CREATE TABLE " + ReviewsEntry.TABLE_NAME + " (" +
                 ReviewsEntry._ID + " INTEGER PRIMARY KEY, " +
-                ReviewsEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
-                ReviewsEntry.COLUMN_REVIEW_ID + " TEXT, " +
+                ReviewsEntry.COLUMN_REVIEW_ID + " TEXT UNIQUE NOT NULL, " +
+                ReviewsEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
                 ReviewsEntry.COLUMN_AUTHOR + " TEXT, " +
                 ReviewsEntry.COLUMN_CONTENT + " TEXT);";
 
+        // now actually create the tables
+        sqLiteDatabase.execSQL(SQL_CREATE_POSTERS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_DETAILS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_REVIEWS_TABLE);
     }
 
     @Override
