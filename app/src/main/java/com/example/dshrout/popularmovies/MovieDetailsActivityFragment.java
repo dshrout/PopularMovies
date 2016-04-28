@@ -7,13 +7,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dshrout.popularmovies.helper.MovieCard;
 import com.example.dshrout.popularmovies.helper.PopularMovies;
@@ -56,20 +54,32 @@ public class MovieDetailsActivityFragment extends Fragment {
         TextView rating = ((TextView) mRootView.findViewById(R.id.moviedetail_userrating));
         TextView summary = ((TextView) mRootView.findViewById(R.id.moviedetail_summary));
 
-        if (mMovieDetails.getTitle().length()>0)
+        if (mMovieDetails.getTitle().length()>0) {
             title.setText(mMovieDetails.getTitle());
-        if (mMovieDetails.getPosterPath().length()>0)
+        }
+
+        if (mMovieDetails.getPosterPath().length()>0) {
             Picasso.with(getActivity()).load(mMovieDetails.getPosterPath()).into(poster);
-        else
+            //Glide.with(getActivity()).load(mMovieDetails.getPosterPath()).into(poster);
+        } else {
             poster.setImageResource(R.drawable.no_image_found);
-        if (mMovieDetails.getReleaseDate().length()>0)
+        }
+
+        if (mMovieDetails.getReleaseDate().length()>0) {
             date.setText(mMovieDetails.getReleaseDate().trim().substring(0, 4));
-        if (mMovieDetails.getRuntime().length()>0)
+        }
+
+        if (mMovieDetails.getRuntime().length()>0) {
             runtime.setText(mMovieDetails.getRuntime().trim() + "min");
-        if (mMovieDetails.getVoterAverage().length()>0)
+        }
+
+        if (mMovieDetails.getVoterAverage().length()>0) {
             rating.setText(mMovieDetails.getVoterAverage().trim() + "/10");
-        if (mMovieDetails.getSummary().length()>0)
+        }
+
+        if (mMovieDetails.getSummary().length()>0) {
             summary.setText(mMovieDetails.getSummary());
+        }
     }
 
     private void getMovieDetails(String movieId){
@@ -80,7 +90,9 @@ public class MovieDetailsActivityFragment extends Fragment {
         private boolean NetworkAvailable() {
             ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo info = connManager.getActiveNetworkInfo();
-            if (info == null) return false;
+            if (info == null) {
+                return false;
+            }
             NetworkInfo.State network = info.getState();
             return (network == NetworkInfo.State.CONNECTED || network == NetworkInfo.State.CONNECTING);
         }
@@ -97,8 +109,9 @@ public class MovieDetailsActivityFragment extends Fragment {
             if(NetworkAvailable()) {
                 PopularMovies popMovies = new PopularMovies();
                 // make sure we have something to work with
-                if (params.length == 0 || params[0] == "")
+                if (params.length == 0 || params[0].equals("")) {
                     return null;
+                }
 
                 return popMovies.GetMovie(params[0]);
             } else {

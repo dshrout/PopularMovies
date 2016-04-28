@@ -1,9 +1,7 @@
 package com.example.dshrout.popularmovies.helper;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.dshrout.popularmovies.data.TmdbResultPage;
 import com.google.gson.Gson;
@@ -22,20 +20,18 @@ import java.util.ArrayList;
 
 public class PopularMovies {
     private final String TMDB_API_KEY = ""; // TODO: remove this key before publishing to github
-    private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w185/";
+    private final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
     private final String TMDB_BASE_URL = "http://api.themoviedb.org/3/";
 
-    public PopularMovies () {
-//        if (TMDB_API_KEY == "") {
-//            throw new AssertionError("MY_DEBUG:\n.\n.\n<<<<<<<<<<<<<<<<<<<<  TMDB_API_KEY cannot be empty  >>>>>>>>>>>>>>>>>>>>\n.\n.\n");
-//        }
-    }
+    public PopularMovies () {}
 
+    // get a movie's details
     public MovieCard GetMovie(String movieId) {
         String urlString = TMDB_BASE_URL + "movie/" + movieId + "?api_key=" + TMDB_API_KEY;
         return GetMovieData(urlString).get(0);
     }
 
+    // get a list of movie posters
     public ArrayList<MovieCard> GetMovies(String sortBy, String sortOrder) {
         String urlString = TMDB_BASE_URL + "discover/movie?" +
                 "sort_by=" + sortBy + "." + sortOrder +

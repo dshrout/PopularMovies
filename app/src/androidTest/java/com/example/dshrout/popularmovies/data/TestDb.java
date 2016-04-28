@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
+import com.example.dshrout.popularmovies.helpers.TestHelper;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -21,42 +23,42 @@ public class TestDb extends AndroidTestCase {
     public void testCreateDb() throws Throwable {
         // create a hash set of all the tables we wish to create
         final HashSet<String> tableNames = new HashSet<>();
-        tableNames.add(PopMoviesContract.PosterEntry.TABLE_NAME);
+        tableNames.add(PopMoviesContract.PostersEntry.TABLE_NAME);
         tableNames.add(PopMoviesContract.DetailsEntry.TABLE_NAME);
         tableNames.add(PopMoviesContract.ReviewsEntry.TABLE_NAME);
 
         // create a hash set of column names for the Poster table
-        final HashSet<String> posterColunms = new HashSet<>();
-        posterColunms.add(PopMoviesContract.PosterEntry._ID);
-        posterColunms.add(PopMoviesContract.PosterEntry.COLUMN_MOVIE_ID);
-        posterColunms.add(PopMoviesContract.PosterEntry.COLUMN_POSTER_PATH);
-        posterColunms.add(PopMoviesContract.PosterEntry.COLUMN_POPULARITY);
-        posterColunms.add(PopMoviesContract.PosterEntry.COLUMN_VOTE_AVERAGE);
-        posterColunms.add(PopMoviesContract.PosterEntry.COLUMN_FAVORITE);
+        final HashSet<String> postersColumns = new HashSet<>();
+        postersColumns.add(PopMoviesContract.PostersEntry._ID);
+        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_MOVIE_ID);
+        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH);
+        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_POPULARITY);
+        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_VOTE_AVERAGE);
+        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_FAVORITE);
 
         // create a hash set of column names for the Details table
-        final HashSet<String> detailsColunms = new HashSet<>();
-        detailsColunms.add(PopMoviesContract.DetailsEntry._ID);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_MOVIE_ID);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_ADULT);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_GENRE_IDS);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_LANGUAGE);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_TITLE);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_OVERVIEW);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_RELEASE_DATE);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_TITLE);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_VIDEO);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_VOTE_COUNT);
-        detailsColunms.add(PopMoviesContract.DetailsEntry.COLUMN_RUNTIME);
+        final HashSet<String> detailsColumns = new HashSet<>();
+        detailsColumns.add(PopMoviesContract.DetailsEntry._ID);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_MOVIE_ID);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_ADULT);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_GENRE_IDS);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_LANGUAGE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_TITLE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_OVERVIEW);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_RELEASE_DATE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_TITLE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_VIDEO);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_VOTE_COUNT);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_RUNTIME);
 
         // create a hash set of column names for the Reviews table
-        final HashSet<String> reviewsColunms = new HashSet<>();
-        reviewsColunms.add(PopMoviesContract.ReviewsEntry._ID);
-        reviewsColunms.add(PopMoviesContract.ReviewsEntry.COLUMN_MOVIE_ID);
-        reviewsColunms.add(PopMoviesContract.ReviewsEntry.COLUMN_REVIEW_ID);
-        reviewsColunms.add(PopMoviesContract.ReviewsEntry.COLUMN_AUTHOR);
-        reviewsColunms.add(PopMoviesContract.ReviewsEntry.COLUMN_CONTENT);
+        final HashSet<String> reviewsColumns = new HashSet<>();
+        reviewsColumns.add(PopMoviesContract.ReviewsEntry._ID);
+        reviewsColumns.add(PopMoviesContract.ReviewsEntry.COLUMN_MOVIE_ID);
+        reviewsColumns.add(PopMoviesContract.ReviewsEntry.COLUMN_REVIEW_ID);
+        reviewsColumns.add(PopMoviesContract.ReviewsEntry.COLUMN_AUTHOR);
+        reviewsColumns.add(PopMoviesContract.ReviewsEntry.COLUMN_CONTENT);
 
         // delete the existing database
         mContext.deleteDatabase(PopMoviesDbHelper.DATABASE_NAME);
@@ -76,9 +78,13 @@ public class TestDb extends AndroidTestCase {
         assertTrue("ERROR: database was created without all the proper tables!", tableNames.isEmpty());
 
         // run the column tests for each table
-        testTableColumns(db, PopMoviesContract.PosterEntry.TABLE_NAME, posterColunms);
-        testTableColumns(db, PopMoviesContract.DetailsEntry.TABLE_NAME, detailsColunms);
-        testTableColumns(db, PopMoviesContract.ReviewsEntry.TABLE_NAME, reviewsColunms);
+        testTableColumns(db, PopMoviesContract.PostersEntry.TABLE_NAME, postersColumns);
+        testTableColumns(db, PopMoviesContract.DetailsEntry.TABLE_NAME, detailsColumns);
+        testTableColumns(db, PopMoviesContract.ReviewsEntry.TABLE_NAME, reviewsColumns);
+
+        // Finally, close the cursor and database
+        cursor.close();
+        db.close();
     }
 
     private void testTableColumns(SQLiteDatabase db, String tableName, HashSet<String> expectedColumns) {
@@ -93,10 +99,11 @@ public class TestDb extends AndroidTestCase {
             expectedColumns.remove(columnName);
         } while (cursor.moveToNext());
         assertTrue("ERROR: " + tableName + " table is missing columns!", expectedColumns.isEmpty());
+        cursor.close();
     }
 
     public void testReadWriteDb() throws Throwable {
-        testTableData(TestHelper.createPosterValues(), PopMoviesContract.PosterEntry.TABLE_NAME);
+        testTableData(TestHelper.createPosterValues(), PopMoviesContract.PostersEntry.TABLE_NAME);
         testTableData(TestHelper.createDetailsValues(), PopMoviesContract.DetailsEntry.TABLE_NAME);
         testTableData(TestHelper.createReviewsValues(), PopMoviesContract.ReviewsEntry.TABLE_NAME);
     }

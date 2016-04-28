@@ -19,7 +19,7 @@ public class PopMoviesContract {
     // The posters table will be used for the main activity.
     // We'll only fetch what we need to show and sort the posters.
     // We'll need the movie id to pass to the details fragment when the user clicks a poster.
-    public static final class PosterEntry implements BaseColumns {
+    public static final class PostersEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_POSTERS).build();
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POSTERS;
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POSTERS;
@@ -63,11 +63,11 @@ public class PopMoviesContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildDetailsByMovieIdUri(String movie_id) {
+        public static Uri buildDetailsByMovieIdUri(int movie_id) {
             // content://com.example.dshrout.popularmovies.app/details/movie/[movie_id]
             return CONTENT_URI.buildUpon()
                     .appendPath("movie")
-                    .appendPath(movie_id)
+                    .appendPath(Integer.toString(movie_id))
                     .build();
         }
 
@@ -94,11 +94,11 @@ public class PopMoviesContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildReviewsByMovieIdUri(String movie_id) {
+        public static Uri buildReviewsByMovieIdUri(int movie_id) {
             // content://com.example.dshrout.popularmovies.app/reviews/movie/[movie_id]
             return CONTENT_URI.buildUpon()
                     .appendPath("movie")
-                    .appendPath(movie_id)
+                    .appendPath(Integer.toString(movie_id))
                     .build();
         }
 

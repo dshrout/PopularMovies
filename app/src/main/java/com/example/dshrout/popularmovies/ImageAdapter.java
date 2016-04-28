@@ -66,11 +66,30 @@ public class ImageAdapter extends BaseAdapter {
         }
 
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        if(mMovies.get(position).getPosterPath() != "")
+        if(mMovies.get(position).getPosterPath() != "") {
             Picasso.with(mContext).load(mMovies.get(position).getPosterPath()).into(imageView);
-        else
+            //Glide.with(mContext).load(mMovies.get(position).getPosterPath()).into(imageView);
+        } else {
             imageView.setImageResource(R.drawable.no_image_found);
-
+        }
         return imageView;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

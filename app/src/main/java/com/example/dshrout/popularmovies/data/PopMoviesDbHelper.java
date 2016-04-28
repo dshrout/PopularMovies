@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.dshrout.popularmovies.data.PopMoviesContract.PosterEntry;
+import com.example.dshrout.popularmovies.data.PopMoviesContract.PostersEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.DetailsEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.ReviewsEntry;
 
@@ -15,19 +15,19 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     static final String DATABASE_NAME = "popularmovies.db";
 
-    PopMoviesDbHelper(Context context) {
+    public PopMoviesDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_POSTERS_TABLE = "CREATE TABLE " + PosterEntry.TABLE_NAME + " (" +
-                PosterEntry._ID + " INTEGER PRIMARY KEY, " +
-                PosterEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
-                PosterEntry.COLUMN_POSTER_PATH + " TEXT, " +
-                PosterEntry.COLUMN_POPULARITY + " TEXT, " +
-                PosterEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
-                PosterEntry.COLUMN_FAVORITE + " INTEGER);";
+        final String SQL_CREATE_POSTERS_TABLE = "CREATE TABLE " + PostersEntry.TABLE_NAME + " (" +
+                PostersEntry._ID + " INTEGER PRIMARY KEY, " +
+                PostersEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
+                PostersEntry.COLUMN_POSTER_PATH + " TEXT, " +
+                PostersEntry.COLUMN_POPULARITY + " TEXT, " +
+                PostersEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
+                PostersEntry.COLUMN_FAVORITE + " INTEGER);";
 
         final String SQL_CREATE_DETAILS_TABLE = "CREATE TABLE " + DetailsEntry.TABLE_NAME + " (" +
                 DetailsEntry._ID + " INTEGER PRIMARY KEY, " +
@@ -65,7 +65,7 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
         // It does NOT depend on the version number for your application.
         // If you want to update the schema without wiping data, commenting out the next 2 lines
         // should be your top priority before modifying this method.
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PosterEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PostersEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DetailsEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ReviewsEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
