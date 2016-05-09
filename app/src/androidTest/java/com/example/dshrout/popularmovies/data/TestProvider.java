@@ -1,6 +1,7 @@
 package com.example.dshrout.popularmovies.data;
 
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
@@ -8,6 +9,8 @@ import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.CalendarContract;
+import android.provider.UserDictionary;
 import android.test.AndroidTestCase;
 
 import com.example.dshrout.popularmovies.data.PopMoviesContract.DetailsEntry;
