@@ -163,23 +163,6 @@ public class PopMoviesProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortBy) {
         Cursor cursor;
 
-        switch (sortBy.toLowerCase())
-        {
-
-            case "uservotes":
-                sortBy = PostersEntry.COLUMN_VOTE_AVERAGE+" DESC";
-                break;
-
-            case "favorites":
-                sortBy = PostersEntry.COLUMN_FAVORITE+" DESC";
-                break;
-
-            case "popularity":
-            default:
-                sortBy = PostersEntry.COLUMN_POPULARITY+" DESC";
-                break;
-        }
-
         switch (_uriMatcher.match(uri))
         {
             case POSTERS:
@@ -201,7 +184,9 @@ public class PopMoviesProvider extends ContentProvider {
                 throw new UnsupportedOperationException("QUERY: Undefined URI code: " + uri);
         }
 
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (cursor != null) {
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return cursor;
     }
 
@@ -311,8 +296,9 @@ public class PopMoviesProvider extends ContentProvider {
                 throw new UnsupportedOperationException("UPDATE: Undefined URI code: " + uri);
         }
 
-        if (rowsUpdated != 0)
+        if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
+        }
 
         return rowsUpdated;
     }
@@ -330,9 +316,11 @@ public class PopMoviesProvider extends ContentProvider {
         SQLiteStatement statement;
         final SQLiteDatabase db = popMoviesDbHelper.getWritableDatabase();
 
+
         switch (_uriMatcher.match(uri)) {
             case POSTERS:
-                sql = "INSERT INTO " + PostersEntry.TABLE_NAME + " VALUES (?,?,?,?,?,?);";
+                db.delete(PostersEntry.TABLE_NAME, null, null);
+                sql = "INSERT OR IGNORE INTO " + PostersEntry.TABLE_NAME + " VALUES (?,?,?);";
                 statement = db.compileStatement(sql);
                 db.beginTransaction();
                 try {
@@ -340,9 +328,6 @@ public class PopMoviesProvider extends ContentProvider {
                         statement.clearBindings();
                         statement.bindLong(2, value.getAsLong(PostersEntry.COLUMN_MOVIE_ID));
                         statement.bindString(3, value.getAsString(PostersEntry.COLUMN_POSTER_PATH));
-                        statement.bindString(4, value.getAsString(PostersEntry.COLUMN_POPULARITY));
-                        statement.bindDouble(5, value.getAsDouble(PostersEntry.COLUMN_VOTE_AVERAGE));
-                        statement.bindLong(6, value.getAsLong(PostersEntry.COLUMN_FAVORITE));
                         if (statement.executeInsert() != -1) {
                             ++insertCount;
                         }
@@ -353,24 +338,24 @@ public class PopMoviesProvider extends ContentProvider {
                 }
                 break;
             case DETAILS:
-                sql = "INSERT INTO " + DetailsEntry.TABLE_NAME + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                db.delete(DetailsEntry.TABLE_NAME, null, null);
+                sql = "INSERT OR IGNORE INTO " + DetailsEntry.TABLE_NAME + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
                 statement = db.compileStatement(sql);
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
                         statement.clearBindings();
                         statement.bindLong(2, value.getAsLong(DetailsEntry.COLUMN_MOVIE_ID));
-                        statement.bindLong(3, value.getAsLong(DetailsEntry.COLUMN_ADULT));
-                        statement.bindString(4, value.getAsString(DetailsEntry.COLUMN_BACKDROP_PATH));
-                        statement.bindString(5, value.getAsString(DetailsEntry.COLUMN_GENRE_IDS));
-                        statement.bindString(6, value.getAsString(DetailsEntry.COLUMN_ORIGINAL_LANGUAGE));
-                        statement.bindString(7, value.getAsString(DetailsEntry.COLUMN_ORIGINAL_TITLE));
-                        statement.bindString(8, value.getAsString(DetailsEntry.COLUMN_OVERVIEW));
-                        statement.bindString(9, value.getAsString(DetailsEntry.COLUMN_RELEASE_DATE));
-                        statement.bindString(10, value.getAsString(DetailsEntry.COLUMN_TITLE));
-                        statement.bindLong(11, value.getAsLong(DetailsEntry.COLUMN_VIDEO));
-                        statement.bindLong(12, value.getAsLong(DetailsEntry.COLUMN_VOTE_COUNT));
-                        statement.bindLong(13, value.getAsLong(DetailsEntry.COLUMN_RUNTIME));
+                        statement.bindString(3, value.getAsString(DetailsEntry.COLUMN_TITLE));
+                        statement.bindString(4, value.getAsString(DetailsEntry.COLUMN_TAGLINE));
+                        statement.bindString(5, value.getAsString(DetailsEntry.COLUMN_POSTER_PATH));
+                        statement.bindString(6, value.getAsString(DetailsEntry.COLUMN_BACKDROP_PATH));
+                        statement.bindString(7, value.getAsString(DetailsEntry.COLUMN_OVERVIEW));
+                        statement.bindString(8, value.getAsString(DetailsEntry.COLUMN_RELEASE_DATE));
+                        statement.bindString(9, value.getAsString(DetailsEntry.COLUMN_RUNTIME));
+                        statement.bindString(10, value.getAsString(DetailsEntry.COLUMN_POPULARITY));
+                        statement.bindString(11, value.getAsString(DetailsEntry.COLUMN_VOTE_AVERAGE));
+                        statement.bindString(12, value.getAsString(DetailsEntry.COLUMN_VOTE_COUNT));
                         if (statement.executeInsert() != -1) {
                             ++insertCount;
                         }
@@ -381,7 +366,7 @@ public class PopMoviesProvider extends ContentProvider {
                 }
                 break;
             case REVIEWS:
-                sql = "INSERT INTO " + ReviewsEntry.TABLE_NAME + " VALUES (?,?,?,?,?);";
+                sql = "INSERT OR IGNORE INTO " + ReviewsEntry.TABLE_NAME + " VALUES (?,?,?,?,?);";
                 statement = db.compileStatement(sql);
                 db.beginTransaction();
                 try {

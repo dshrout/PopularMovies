@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivityFragment"
+    tools:context=".MainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:singleLine="false"
-        android:textColor="#222"
+        android:textColor="#fff"
         android:textSize="40sp"
         android:gravity="center"
         android:visibility="gone"
         android:text="@string/no_results"
-    />
+        android:foreground="#ffffff" />
 
     <GridView
         android:id="@+id/gridview_movies"
@@ -24,5 +24,5 @@
         android:gravity="center"
         android:verticalSpacing="0dp"
         android:horizontalSpacing="0dp"
-    />
+        android:background="#000000" />
 </RelativeLayout>

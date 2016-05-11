@@ -10,8 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.test.AndroidTestCase;
 
-import com.example.dshrout.popularmovies.data.PopMoviesContract.PostersEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.DetailsEntry;
+import com.example.dshrout.popularmovies.data.PopMoviesContract.PostersEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.ReviewsEntry;
 import com.example.dshrout.popularmovies.helpers.TestHelper;
 
@@ -55,7 +55,6 @@ public class TestProvider extends AndroidTestCase {
         for (int i = 0; i < rowCount; ++i) {
             ContentValues posterContent = TestHelper.createPosterValues();
             posterContent.put(PostersEntry.COLUMN_MOVIE_ID, TEST_MOVIE_ID + i);
-            posterContent.put(PostersEntry.COLUMN_VOTE_AVERAGE, i);
             posterList[i] = posterContent;
 
             ContentValues detailsContent = TestHelper.createDetailsValues();
@@ -183,7 +182,6 @@ public class TestProvider extends AndroidTestCase {
         mContext.getContentResolver().registerContentObserver(PostersEntry.CONTENT_URI, true, tco);
 
         // modify the content values and update the table
-        content.put(PostersEntry.COLUMN_FAVORITE, 0);
         count = mContext.getContentResolver().update(PostersEntry.CONTENT_URI, content, PostersEntry.COLUMN_MOVIE_ID + " = ?", new String[] { Long.toString(TEST_MOVIE_ID)});
         // TEST: were we able to update the table?
         assertEquals("ERROR: update of POSTERS table failed", 1, count);
@@ -296,6 +294,7 @@ public class TestProvider extends AndroidTestCase {
     public void testBulkInsert() {
         int insertCount;
         Cursor cursor;
+
         TestHelper.TestContentObserver contentObserver = TestHelper.getTestContentObserver();
         Map<String, ContentValues[]> bulkData = createBulkContent(BULK_INSERT_RECORDS_TO_INSERT);
 

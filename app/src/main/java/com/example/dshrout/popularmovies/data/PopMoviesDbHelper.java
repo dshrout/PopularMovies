@@ -24,25 +24,21 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_POSTERS_TABLE = "CREATE TABLE " + PostersEntry.TABLE_NAME + " (" +
                 PostersEntry._ID + " INTEGER PRIMARY KEY, " +
                 PostersEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
-                PostersEntry.COLUMN_POSTER_PATH + " TEXT, " +
-                PostersEntry.COLUMN_POPULARITY + " TEXT, " +
-                PostersEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
-                PostersEntry.COLUMN_FAVORITE + " INTEGER);";
+                PostersEntry.COLUMN_POSTER_PATH + " TEXT);";
 
         final String SQL_CREATE_DETAILS_TABLE = "CREATE TABLE " + DetailsEntry.TABLE_NAME + " (" +
                 DetailsEntry._ID + " INTEGER PRIMARY KEY, " +
                 DetailsEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
-                DetailsEntry.COLUMN_ADULT + " INTEGER, " +
+                DetailsEntry.COLUMN_TITLE + " TEXT, " +
+                DetailsEntry.COLUMN_TAGLINE + " TEXT, " +
+                DetailsEntry.COLUMN_POSTER_PATH + " TEXT, " +
                 DetailsEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
-                DetailsEntry.COLUMN_GENRE_IDS + " TEXT, " +
-                DetailsEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT, " +
-                DetailsEntry.COLUMN_ORIGINAL_TITLE + " TEXT, " +
                 DetailsEntry.COLUMN_OVERVIEW + " TEXT, " +
                 DetailsEntry.COLUMN_RELEASE_DATE + " TEXT, " +
-                DetailsEntry.COLUMN_TITLE + " TEXT, " +
-                DetailsEntry.COLUMN_VIDEO + " INTEGER, " +
-                DetailsEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
-                DetailsEntry.COLUMN_RUNTIME + " INTEGER);";
+                DetailsEntry.COLUMN_RUNTIME + " TEXT, " +
+                DetailsEntry.COLUMN_POPULARITY + " TEXT, " +
+                DetailsEntry.COLUMN_VOTE_AVERAGE + " TEXT, " +
+                DetailsEntry.COLUMN_VOTE_COUNT + " TEXT);";
 
         final String SQL_CREATE_REVIEWS_TABLE = "CREATE TABLE " + ReviewsEntry.TABLE_NAME + " (" +
                 ReviewsEntry._ID + " INTEGER PRIMARY KEY, " +
@@ -71,3 +67,17 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

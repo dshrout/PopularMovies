@@ -6,13 +6,13 @@ import java.util.List;
 /**
  * Created by DShrout on 10/13/2015.
  */
-public class TmdbResultPage {
+public class PostersList {
     public long page;
-    public List<TmdbMovieItem> results;
+    public List<PostersItem> results;
     public long total_pages;
     public long total_results;
 
-    public TmdbResultPage() {
+    public PostersList() {
         page = -1;
         results = new ArrayList<>();
         total_pages = -1;

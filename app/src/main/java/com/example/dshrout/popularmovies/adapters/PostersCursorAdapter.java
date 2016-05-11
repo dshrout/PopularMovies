@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 
+import com.example.dshrout.popularmovies.MainFragment;
 import com.example.dshrout.popularmovies.R;
+import com.squareup.picasso.Picasso;
 
 /**
- * Created by DShrout on 4/26/2016.
+ * Created by DShrout on 4/26/2016
  */
 public class PostersCursorAdapter extends CursorAdapter {
 
@@ -29,12 +32,9 @@ public class PostersCursorAdapter extends CursorAdapter {
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        int viewType = getItemViewType(cursor.getPosition());
-        int layoutId = (viewType > 0) ? R.layout.moviecard_listitem : R.layout.moviecard_listitem;
-
-        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
-//        MovieViewHolder fvh = new MovieViewHolder(view);
-//        view.setTag(fvh);
+        View view = LayoutInflater.from(context).inflate(R.layout.moviecard_listitem, parent, false);
+        ViewPlaceholder placeholder = new ViewPlaceholder(view);
+        view.setTag(placeholder);
         return view;
     }
 
@@ -47,25 +47,21 @@ public class PostersCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
+        ViewPlaceholder placeholder = (ViewPlaceholder)view.getTag();
+        String posterPath = cursor.getString(MainFragment.COL_POSTER_PATH);
+        if (posterPath != null && !posterPath.isEmpty()) {
+            Picasso.with(context).load("http://image.tmdb.org/t/p/w342/" + posterPath).into(placeholder.posterItem);
+        } else {
+            placeholder.posterItem.setImageResource(R.drawable.no_image_found);
+        }
     }
 
-    /*
-        Holder class to cache the child views of a list item.
-        Adding this to the tag of an inflated view will prevent unnecessary findViewById calls for recycled views.
-     */
-//    public static class MovieViewHolder {
-//        public final ImageView iconView;
-//        public final TextView dateView;
-//        public final TextView forecastView;
-//        public final TextView highView;
-//        public final TextView lowView;
-//
-//        public MovieViewHolder(View view) {
-//            iconView = (ImageView) view.findViewById(R.id.list_item_icon);
-//            dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
-//            forecastView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-//            highView = (TextView) view.findViewById(R.id.list_item_high_textview);
-//            lowView = (TextView) view.findViewById(R.id.list_item_low_textview);
-//        }
+    // Passing a placeholder class in the tag of an inflated view will reduce the number of calls to findViewById.
+    public static class ViewPlaceholder {
+        public final ImageView posterItem;
+
+        public ViewPlaceholder(View view) {
+            posterItem = (ImageView) view.findViewById(R.id.moviecard_listitem_imageview);
+        }
+    }
 }

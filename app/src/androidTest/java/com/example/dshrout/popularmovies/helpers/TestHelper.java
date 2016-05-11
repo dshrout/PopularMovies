@@ -22,24 +22,16 @@ public class TestHelper {
         ContentValues posterValues = new ContentValues();
         posterValues.put(PopMoviesContract.PostersEntry.COLUMN_MOVIE_ID, TEST_MOVIE_ID);
         posterValues.put(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH, "/2lECpi35Hnbpa4y46JX0aY3AWTy.jpg");
-        posterValues.put(PopMoviesContract.PostersEntry.COLUMN_POPULARITY, 2.50307202280779);
-        posterValues.put(PopMoviesContract.PostersEntry.COLUMN_VOTE_AVERAGE, 7.7);
-        posterValues.put(PopMoviesContract.PostersEntry.COLUMN_FAVORITE, 1);
         return posterValues;
     }
 
     public static ContentValues createDetailsValues() {
         ContentValues detailsValues = new ContentValues();
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_MOVIE_ID, TEST_MOVIE_ID);
-        detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_ADULT, 0);
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH, "/hNFMawyNDWZKKHU4GYCBz1krsRM.jpg");
-        detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_GENRE_IDS, ".18.");
-        detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_LANGUAGE, "en");
-        detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_TITLE, "Fight Club");
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_OVERVIEW, "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy.");
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_RELEASE_DATE, "1999-10-14");
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_TITLE, "Fight Club");
-        detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_VIDEO, 0);
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_VOTE_COUNT, 3185);
         detailsValues.put(PopMoviesContract.DetailsEntry.COLUMN_RUNTIME, 139);
         return detailsValues;

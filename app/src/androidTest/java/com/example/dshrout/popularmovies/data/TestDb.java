@@ -32,25 +32,21 @@ public class TestDb extends AndroidTestCase {
         postersColumns.add(PopMoviesContract.PostersEntry._ID);
         postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_MOVIE_ID);
         postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH);
-        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_POPULARITY);
-        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_VOTE_AVERAGE);
-        postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_FAVORITE);
 
         // create a hash set of column names for the Details table
         final HashSet<String> detailsColumns = new HashSet<>();
         detailsColumns.add(PopMoviesContract.DetailsEntry._ID);
         detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_MOVIE_ID);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_ADULT);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_TITLE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_TAGLINE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_POSTER_PATH);
         detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_GENRE_IDS);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_LANGUAGE);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_ORIGINAL_TITLE);
         detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_OVERVIEW);
         detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_RELEASE_DATE);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_TITLE);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_VIDEO);
-        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_VOTE_COUNT);
         detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_RUNTIME);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_POPULARITY);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_VOTE_AVERAGE);
+        detailsColumns.add(PopMoviesContract.DetailsEntry.COLUMN_VOTE_COUNT);
 
         // create a hash set of column names for the Reviews table
         final HashSet<String> reviewsColumns = new HashSet<>();
