@@ -104,11 +104,7 @@ public class PopulateDatabase {
             for (PostersItem poster : posters) {
                 ContentValues posterValues = new ContentValues();
                 posterValues.put(PopMoviesContract.PostersEntry.COLUMN_MOVIE_ID, poster.id);
-                if (poster.poster_path.length() > 0 && !poster.poster_path.equals("null")) {
-                    posterValues.put(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH, poster.poster_path);
-                } else {
-                    posterValues.put(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH, "");
-                }
+                posterValues.put(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH, poster.poster_path);
                 postersList.add(posterValues);
             }
 
@@ -130,16 +126,8 @@ public class PopulateDatabase {
             detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_MOVIE_ID, details.id);
             detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_TITLE, details.title);
             detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_TAGLINE, details.tagline);
-            if (details.poster_path.length() > 0 && !details.poster_path.equals("null")) {
-                detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_POSTER_PATH, details.poster_path);
-            } else {
-                detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_POSTER_PATH, "");
-            }
-            if (details.backdrop_path.length() > 0 && !details.backdrop_path.equals("null")) {
-                detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH, details.backdrop_path);
-            } else {
-                detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH, "");
-            }
+            detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_POSTER_PATH, details.poster_path);
+            detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_BACKDROP_PATH, details.backdrop_path);
             detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_OVERVIEW, details.overview);
             detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_RELEASE_DATE, details.release_date);
             detailValues.put(PopMoviesContract.DetailsEntry.COLUMN_RUNTIME, details.runtime);

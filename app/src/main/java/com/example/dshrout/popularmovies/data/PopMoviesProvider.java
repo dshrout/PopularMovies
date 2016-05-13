@@ -237,7 +237,7 @@ public class PopMoviesProvider extends ContentProvider {
     /**
      * @param uri           The full URI to query, including a row ID (if a specific record is requested).
      * @param selection     An optional restriction to apply to rows when deleting.
-     * @param selectionArgs
+     * @param selectionArgs Arguments for the selection parameter
      * @return The number of rows affected.
      * @throws SQLException
      */
@@ -273,7 +273,7 @@ public class PopMoviesProvider extends ContentProvider {
      * @param values        A set of column_name/value pairs to update in the database.
      *                      This must not be {@code null}.
      * @param selection     An optional filter to match rows to update.
-     * @param selectionArgs
+     * @param selectionArgs Arguments for the selection parameter
      * @return the number of rows affected.
      */
     @Override
@@ -325,9 +325,11 @@ public class PopMoviesProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
+                        String posterPath = value.getAsString(PostersEntry.COLUMN_POSTER_PATH);
+
                         statement.clearBindings();
                         statement.bindLong(2, value.getAsLong(PostersEntry.COLUMN_MOVIE_ID));
-                        statement.bindString(3, value.getAsString(PostersEntry.COLUMN_POSTER_PATH));
+                        statement.bindString(3, posterPath != null ? posterPath : "");
                         if (statement.executeInsert() != -1) {
                             ++insertCount;
                         }
@@ -341,21 +343,33 @@ public class PopMoviesProvider extends ContentProvider {
                 db.delete(DetailsEntry.TABLE_NAME, null, null);
                 sql = "INSERT OR IGNORE INTO " + DetailsEntry.TABLE_NAME + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
                 statement = db.compileStatement(sql);
+
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
+                        String title = value.getAsString(DetailsEntry.COLUMN_TITLE);
+                        String tagline = value.getAsString(DetailsEntry.COLUMN_TAGLINE);
+                        String posterPath = value.getAsString(DetailsEntry.COLUMN_POSTER_PATH);
+                        String backdropPath = value.getAsString(DetailsEntry.COLUMN_BACKDROP_PATH);
+                        String overview = value.getAsString(DetailsEntry.COLUMN_OVERVIEW);
+                        String releaseDate = value.getAsString(DetailsEntry.COLUMN_RELEASE_DATE);
+                        String runtime = value.getAsString(DetailsEntry.COLUMN_RUNTIME);
+                        String popularity = value.getAsString(DetailsEntry.COLUMN_POPULARITY);
+                        String voteAverage = value.getAsString(DetailsEntry.COLUMN_VOTE_AVERAGE);
+                        String voteCount = value.getAsString(DetailsEntry.COLUMN_VOTE_COUNT);
+
                         statement.clearBindings();
                         statement.bindLong(2, value.getAsLong(DetailsEntry.COLUMN_MOVIE_ID));
-                        statement.bindString(3, value.getAsString(DetailsEntry.COLUMN_TITLE));
-                        statement.bindString(4, value.getAsString(DetailsEntry.COLUMN_TAGLINE));
-                        statement.bindString(5, value.getAsString(DetailsEntry.COLUMN_POSTER_PATH));
-                        statement.bindString(6, value.getAsString(DetailsEntry.COLUMN_BACKDROP_PATH));
-                        statement.bindString(7, value.getAsString(DetailsEntry.COLUMN_OVERVIEW));
-                        statement.bindString(8, value.getAsString(DetailsEntry.COLUMN_RELEASE_DATE));
-                        statement.bindString(9, value.getAsString(DetailsEntry.COLUMN_RUNTIME));
-                        statement.bindString(10, value.getAsString(DetailsEntry.COLUMN_POPULARITY));
-                        statement.bindString(11, value.getAsString(DetailsEntry.COLUMN_VOTE_AVERAGE));
-                        statement.bindString(12, value.getAsString(DetailsEntry.COLUMN_VOTE_COUNT));
+                        statement.bindString(3, title != null ? title : "");
+                        statement.bindString(4, tagline != null ? tagline : "");
+                        statement.bindString(5, posterPath != null ? posterPath : "");
+                        statement.bindString(6, backdropPath != null ? backdropPath : "");
+                        statement.bindString(7, overview != null ? overview : "");
+                        statement.bindString(8, releaseDate != null ? releaseDate : "");
+                        statement.bindString(9, runtime != null ? runtime : "");
+                        statement.bindString(10, popularity != null ? popularity : "");
+                        statement.bindString(11, voteAverage != null ? voteAverage : "");
+                        statement.bindString(12, voteCount != null ? voteCount : "");
                         if (statement.executeInsert() != -1) {
                             ++insertCount;
                         }

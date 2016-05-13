@@ -109,22 +109,22 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         title.setText(cursor.getString(COL_TITLE));
 
         String posterPath = cursor.getString(COL_POSTER_PATH);
-        if (posterPath.length() > 0) {
+        if (posterPath != null && posterPath.length() > 0) {
             Picasso.with(getActivity()).load(TMDB_IMAGE_PATH + posterPath).into(poster);
         } else {
             poster.setImageResource(R.drawable.no_image_found);
         }
 
-        String releaseYear = cursor.getString(COL_RELEASE_DATE).trim().substring(0, 4);
-        if (releaseYear.length() > 0) {
-            date.setText(releaseYear);
+        String releaseDate = cursor.getString(COL_RELEASE_DATE);
+        if (releaseDate != null && releaseDate.length() == 8) {
+            date.setText(releaseDate.substring(0, 4));
         }
 
-        runtime.setText(Integer.toString(cursor.getInt(COL_RUNTIME)).trim() + "min");
-        rating.setText(cursor.getString(COL_VOTE_AVERAGE).trim() + "/10");
+        runtime.setText(String.format(getResources().getString(R.string.format_runtime), Integer.toString(cursor.getInt(COL_RUNTIME)).trim()));
+        rating.setText(String.format(getResources().getString(R.string.format_vote_average), cursor.getString(COL_VOTE_AVERAGE).trim()));
 
         String overview = cursor.getString(COL_OVERVIEW);
-        if (overview.length() > 0) {
+        if (overview != null && overview.length() > 0) {
             summary.setText(overview);
         }
     }

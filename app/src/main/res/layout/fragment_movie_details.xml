@@ -7,7 +7,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    >
+    android:background="#000000">
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
         android:paddingRight="0dp"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
-        >
+        android:background="#000000">
 
         <RelativeLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,20 +24,20 @@
             android:paddingRight="0dp"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
-            >
+            android:background="#000000">
 
             <TextView android:id="@+id/moviedetail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="105dp"
                 android:singleLine="false"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:textSize="40sp"
                 android:gravity="center_vertical"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:paddingBottom="5dp"
-                android:background="#009688"
+                android:background="#FFB612"
                 android:layout_marginBottom="10dp"
                 android:shadowColor="#333"
                 android:shadowDx="10"
@@ -65,7 +65,8 @@
                 android:layout_toEndOf="@id/moviedetail_poster"
                 android:layout_below="@id/moviedetail_title"
                 android:textSize="32sp"
-            />
+                android:textColor="#fff"
+                android:background="#000000" />
 
             <TextView android:id="@+id/moviedetail_runtime"
                 android:layout_width="wrap_content"
@@ -75,7 +76,8 @@
                 android:layout_below="@id/moviedetail_releasedate"
                 android:textSize="24sp"
                 android:textStyle="bold|italic"
-                />
+                android:background="#000000"
+                android:textColor="#fff" />
 
             <TextView android:id="@+id/moviedetail_userrating"
                 android:layout_width="wrap_content"
@@ -85,7 +87,8 @@
                 android:layout_toEndOf="@id/moviedetail_poster"
                 android:layout_below="@id/moviedetail_runtime"
                 android:textStyle="bold"
-                />
+                android:textColor="#fff"
+                android:background="#000000" />
 
             <TextView android:id="@+id/moviedetail_summary"
                 android:layout_width="wrap_content"
@@ -95,7 +98,8 @@
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
-                />
+                android:background="#000000"
+                android:textColor="#fff" />
 
         </RelativeLayout>
     </ScrollView>

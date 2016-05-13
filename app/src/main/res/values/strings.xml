@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Popular Movies</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -15,4 +15,8 @@
     <string name="title_activity_movie_details">Movie Details</string>
     <string name="content_desc_movie_details">Movie Poster</string>
     <string name="no_results">No Results</string>
+
+    <!-- Display formats -->
+    <string name="format_runtime"><xliff:g id="runtime">%1$s</xliff:g>min</string>
+    <string name="format_vote_average"><xliff:g id="vote_average">%1$s</xliff:g>/10</string>
 </resources>
