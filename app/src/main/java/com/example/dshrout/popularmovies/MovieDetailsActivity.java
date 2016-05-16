@@ -10,5 +10,10 @@ public class MovieDetailsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_details_container, new MovieDetailsFragment())
+                    .commit();
+        }
     }
 }

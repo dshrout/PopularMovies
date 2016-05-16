@@ -44,6 +44,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public MainFragment() {
     }
 
+    /**
+     * A callback interface that all activities containing this fragment must implement.
+     * This mechanism allows activities to be notified of item selections.
+     */
+    public interface Callback {
+        public void onItemSelected(Uri detailsUri);
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +104,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onItemClick(AdapterView adapterView, View view, int position, long id) {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    Intent detailsIntent = new Intent(getActivity(), MovieDetailsActivity.class)
-                            .setData(PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID)));
-                    startActivity(detailsIntent);
+                    ((Callback) getActivity()).onItemSelected(PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID)));
+//                    Intent detailsIntent = new Intent(getActivity(), MovieDetailsActivity.class)
+//                            .setData(PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID)));
+//                    startActivity(detailsIntent);
                 }
             }
         });

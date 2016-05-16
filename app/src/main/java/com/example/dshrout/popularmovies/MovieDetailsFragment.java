@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int DETAILS_LOADER = 1001;
     private View mRootView;
+    static final String MOVIE_DETAIL_URI = "URI";
 
     private static final String[] DETAILS_COLUMNS = {
             PopMoviesContract.DetailsEntry._ID,
