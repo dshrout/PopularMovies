@@ -1,6 +1,5 @@
 package com.example.dshrout.popularmovies;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -104,10 +103,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onItemClick(AdapterView adapterView, View view, int position, long id) {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID)));
-//                    Intent detailsIntent = new Intent(getActivity(), MovieDetailsActivity.class)
-//                            .setData(PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID)));
-//                    startActivity(detailsIntent);
+                    Uri detailsUri = PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID));
+                    ((Callback) getActivity()).onItemSelected(detailsUri);
                 }
             }
         });

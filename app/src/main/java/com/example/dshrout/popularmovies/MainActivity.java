@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.example.dshrout.popularmovies.data.PopMoviesContract;
 
 
 public class MainActivity extends ActionBarActivity implements MainFragment.Callback {
@@ -43,6 +39,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                     .replace(R.id.fragment_details_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
+
             Intent detailsIntent = new Intent(this, MovieDetailsActivity.class).setData(detailsUri);
             startActivity(detailsIntent);
         }

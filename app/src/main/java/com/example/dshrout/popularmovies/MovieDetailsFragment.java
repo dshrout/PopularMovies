@@ -67,7 +67,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private void loadMovieDetails(){
         try {
             Intent intent = getActivity().getIntent();
-            if (intent != null) {
+            if (intent != null && intent.getData() != null) {
                 long movieId = PopMoviesContract.DetailsEntry.getMovieIdFromUri(intent.getData());
                 new GetDetailsTask(getActivity()).execute(movieId);
             }
@@ -86,7 +86,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Intent intent = getActivity().getIntent();
-        if (intent == null) {
+        if (intent == null || intent.getData() == null) {
             return null;
         }
 
