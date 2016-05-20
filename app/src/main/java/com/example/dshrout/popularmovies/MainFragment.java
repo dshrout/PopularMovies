@@ -19,7 +19,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.dshrout.popularmovies.adapters.PostersCursorAdapter;
-import com.example.dshrout.popularmovies.asynctasks.GePostersTask;
+import com.example.dshrout.popularmovies.asynctasks.GetPostersTask;
 import com.example.dshrout.popularmovies.data.PopMoviesContract;
 
 
@@ -90,9 +90,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        // get the db populated
+        updateMovieCards();
+
         // Create a list to hold the movie cards then update it
         mPostersCursorAdapter = new PostersCursorAdapter(getActivity(), null, 0);
-        //updateMovieCards(rootView);
 
         // attach adapter to view
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
@@ -109,7 +111,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        updateMovieCards();
         return rootView;
     }
 
@@ -120,7 +121,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void updateMovieCards(){
-        new GePostersTask(getActivity()).execute();
+        new GetPostersTask(getActivity()).execute();
     }
 
     @Override

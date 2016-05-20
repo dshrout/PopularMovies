@@ -2,6 +2,7 @@ package com.example.dshrout.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -11,12 +12,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.dshrout.popularmovies.asynctasks.GetDetailsTask;
+import com.example.dshrout.popularmovies.asynctasks.GetReviewsTask;
 import com.example.dshrout.popularmovies.data.PopMoviesContract;
+import com.example.dshrout.popularmovies.data.ReviewsItem;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 
 /**
@@ -24,7 +31,7 @@ import com.squareup.picasso.Picasso;
  */
 public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int DETAILS_LOADER = 1001;
-    private View mRootView;
+    private Uri mDetailsUri;
     static final String MOVIE_DETAIL_URI = "URI";
 
     private static final String[] DETAILS_COLUMNS = {
@@ -55,22 +62,60 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public static final int COL_VOTE_AVERAGE = 10;
     public static final int COL_VOTE_COUNT = 11;
 
+    private TextView mTitle;
+    private ImageView mPoster;
+    private TextView mDate;
+    private TextView mRuntime;
+    private TextView mRating;
+    private TextView mSummary;
+
+    private ArrayAdapter<ReviewsItem> mReviewsAdapter;
+
     public MovieDetailsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
-        return mRootView;
+        Bundle args = getArguments();
+        if (args != null) {
+            mDetailsUri = getArguments().getParcelable(MOVIE_DETAIL_URI);
+        }
+
+        View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+
+        mTitle = ((TextView) rootView.findViewById(R.id.moviedetail_title));
+        mPoster = ((ImageView) rootView.findViewById(R.id.moviedetail_poster));
+        mDate = ((TextView) rootView.findViewById(R.id.moviedetail_releasedate));
+        mRuntime = ((TextView) rootView.findViewById(R.id.moviedetail_runtime));
+        mRating = ((TextView) rootView.findViewById(R.id.moviedetail_userrating));
+        mSummary = ((TextView) rootView.findViewById(R.id.moviedetail_summary));
+
+        // The ArrayAdapter will take data from a source and use it to populate the ListView it's attached to.
+        mReviewsAdapter = new ArrayAdapter<>(getActivity(),
+                        R.layout.fragment_movie_details,
+                        R.id.listview_reviews,
+                        new ArrayList<ReviewsItem>());
+
+        // Get a reference to the ListView, and attach this adapter to it.
+        ListView listView = (ListView) rootView.findViewById(R.id.listview_reviews);
+        listView.setAdapter(mReviewsAdapter);
+
+
+        return rootView;
     }
 
     private void loadMovieDetails(){
         try {
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.getData() != null) {
-                long movieId = PopMoviesContract.DetailsEntry.getMovieIdFromUri(intent.getData());
-                new GetDetailsTask(getActivity()).execute(movieId);
+            if (mDetailsUri == null) {
+                Intent intent = getActivity().getIntent();
+                if (intent != null && intent.getData() != null) {
+                    mDetailsUri = intent.getData();
+                }
             }
+
+            long movieId = PopMoviesContract.DetailsEntry.getMovieIdFromUri(mDetailsUri);
+            new GetDetailsTask(getActivity()).execute(movieId);
+            new GetReviewsTask(getActivity(), mReviewsAdapter).execute(movieId);
         } catch (Exception e) {
             Log.e("loadMovieDetails", "Error ", e);
         }
@@ -85,48 +130,37 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null || intent.getData() == null) {
-            return null;
-        }
-
-        return new CursorLoader(getActivity(), intent.getData(), DETAILS_COLUMNS, null, null, null);
+        return mDetailsUri == null ? null : new CursorLoader(getActivity(), mDetailsUri, DETAILS_COLUMNS, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
         if (cursor == null || !cursor.moveToFirst()) {
             return;
         }
 
-        TextView title = ((TextView) mRootView.findViewById(R.id.moviedetail_title));
-        ImageView poster = ((ImageView) mRootView.findViewById(R.id.moviedetail_poster));
-        TextView date = ((TextView) mRootView.findViewById(R.id.moviedetail_releasedate));
-        TextView runtime = ((TextView) mRootView.findViewById(R.id.moviedetail_runtime));
-        TextView rating = ((TextView) mRootView.findViewById(R.id.moviedetail_userrating));
-        TextView summary = ((TextView) mRootView.findViewById(R.id.moviedetail_summary));
+        String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w342/";
 
-        title.setText(cursor.getString(COL_TITLE));
+        mTitle.setText(cursor.getString(COL_TITLE));
 
         String posterPath = cursor.getString(COL_POSTER_PATH);
         if (posterPath != null && posterPath.length() > 0) {
-            Picasso.with(getActivity()).load(TMDB_IMAGE_PATH + posterPath).into(poster);
+            Picasso.with(getActivity()).load(TMDB_IMAGE_PATH + posterPath).into(mPoster);
         } else {
-            poster.setImageResource(R.drawable.no_image_found);
+            mPoster.setImageResource(R.drawable.no_image_found);
         }
 
         String releaseDate = cursor.getString(COL_RELEASE_DATE);
         if (releaseDate != null && releaseDate.length() == 8) {
-            date.setText(releaseDate.substring(0, 4));
+            mDate.setText(releaseDate.substring(0, 4));
         }
 
-        runtime.setText(String.format(getResources().getString(R.string.format_runtime), Integer.toString(cursor.getInt(COL_RUNTIME)).trim()));
-        rating.setText(String.format(getResources().getString(R.string.format_vote_average), cursor.getString(COL_VOTE_AVERAGE).trim()));
+        mRuntime.setText(String.format(getResources().getString(R.string.format_runtime), Integer.toString(cursor.getInt(COL_RUNTIME)).trim()));
+        mRating.setText(String.format(getResources().getString(R.string.format_vote_average), cursor.getString(COL_VOTE_AVERAGE).trim()));
 
         String overview = cursor.getString(COL_OVERVIEW);
         if (overview != null && overview.length() > 0) {
-            summary.setText(overview);
+            mSummary.setText(overview);
         }
     }
 

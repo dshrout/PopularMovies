@@ -1,32 +1,26 @@
 package com.example.dshrout.popularmovies.asynctasks;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.widget.ArrayAdapter;
 
-import com.example.dshrout.popularmovies.data.PopMoviesContract;
+import com.example.dshrout.popularmovies.data.ReviewsItem;
 import com.example.dshrout.popularmovies.helper.FetchData;
 
+import java.util.ArrayList;
+
 /**
- * Created by DShrout on 5/3/2016
+ * Created by DShrout on 5/20/2016.
  */
-public class GetDetailsTask extends AsyncTask<Long, Void, Void> {
+public class GetReviewsTask extends AsyncTask<Long, Void, Void> {
     private Context mContext;
+    private ArrayAdapter<ReviewsItem> mReviewsAdapter;
 
-    public GetDetailsTask(Context context) {
+    public GetReviewsTask(Context context, ArrayAdapter<ReviewsItem> reviewsAdapter) {
         mContext = context;
-    }
-
-    private boolean DetailsAvailable(long movieId) {
-        Cursor cursor = mContext.getContentResolver().query(PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri((int)movieId), null, PopMoviesContract.DetailsEntry.COLUMN_MOVIE_ID + " = " + movieId, null, null);
-        boolean result = false;
-        if (cursor != null && cursor.moveToFirst()) {
-            result = true;
-            cursor.close();
-        }
-        return result;
+        mReviewsAdapter = reviewsAdapter;
     }
 
     private boolean NetworkAvailable() {
@@ -42,7 +36,7 @@ public class GetDetailsTask extends AsyncTask<Long, Void, Void> {
     @Override
     protected Void doInBackground(Long... params) {
         // if no movie id was passed in or details are already available then exit
-        if (params.length == 0 || params[0] == 0 || DetailsAvailable(params[0])) {
+        if (params.length == 0 || params[0] == 0) {
             return null;
         }
 
@@ -50,8 +44,17 @@ public class GetDetailsTask extends AsyncTask<Long, Void, Void> {
         // if the network is available, get the details from TMDB
         if(NetworkAvailable()) {
             FetchData fetchData = new FetchData(mContext);
-            fetchData.GetDetails(Long.toString(params[0]));
+            fetchData.GetReviews(Long.toString(params[0]));
         }
         return null;
+    }
+
+    protected void onPostExecute(ArrayList<ReviewsItem> result) {
+        if (result != null) {
+            mReviewsAdapter.clear();
+            for(ReviewsItem review : result) {
+                mReviewsAdapter.add(review);
+            }
+        }
     }
 }

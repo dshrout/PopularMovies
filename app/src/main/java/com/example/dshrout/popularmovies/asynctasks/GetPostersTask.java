@@ -8,15 +8,15 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.example.dshrout.popularmovies.R;
-import com.example.dshrout.popularmovies.helper.PopulateDatabase;
+import com.example.dshrout.popularmovies.helper.FetchData;
 
 /**
  * Created by DShrout on 4/13/2016.
  */
-public class GePostersTask extends AsyncTask<Void, Void, Void> {
+public class GetPostersTask extends AsyncTask<Void, Void, Void> {
     private Context mContext;
 
-    public GePostersTask(Context context) {
+    public GetPostersTask(Context context) {
         mContext = context;
     }
 
@@ -34,8 +34,8 @@ public class GePostersTask extends AsyncTask<Void, Void, Void> {
         String sortBy = sharedPrefs.getString(mContext.getString(R.string.pref_sortby_key), mContext.getString(R.string.pref_sortby_default));
 
         if (NetworkAvailable()) {
-            PopulateDatabase popMovies = new PopulateDatabase(mContext);
-            popMovies.GetPosters(sortBy);
+            FetchData fetchData = new FetchData(mContext);
+            fetchData.GetPosters(sortBy);
             return null;
         } else {
             return null;

@@ -3,10 +3,10 @@ package com.example.dshrout.popularmovies;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 
-public class MainActivity extends ActionBarActivity implements MainFragment.Callback {
+public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
     private final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane = false;
 
@@ -39,7 +39,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                     .replace(R.id.fragment_details_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
-
             Intent detailsIntent = new Intent(this, MovieDetailsActivity.class).setData(detailsUri);
             startActivity(detailsIntent);
         }
