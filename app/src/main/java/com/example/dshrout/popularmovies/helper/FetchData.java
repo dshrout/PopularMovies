@@ -51,13 +51,13 @@ public class FetchData {
         }
     }
 
-    public List<ReviewsItem> GetReviews(String movieId) {
+    public ArrayList<ReviewsItem> GetReviews(String movieId) {
         String urlString = TMDB_BASE_URL + "movie/" + movieId + "/reviews?api_key=" + BuildConfig.TMDB_API_KEY;
         String jsonData = getJsonData(urlString);
         if (jsonData != null && jsonData.length() > 0) {
-            List<ReviewsItem> reviewsItems = null;
+            ArrayList<ReviewsItem> reviewsItems = null;
             try {
-                reviewsItems = new Gson().fromJson(jsonData, ReviewsList.class).results;
+                reviewsItems = (ArrayList<ReviewsItem>) new Gson().fromJson(jsonData, ReviewsList.class).results;
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
             }

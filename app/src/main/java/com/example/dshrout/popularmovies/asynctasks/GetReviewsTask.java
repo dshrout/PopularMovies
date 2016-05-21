@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by DShrout on 5/20/2016.
  */
-public class GetReviewsTask extends AsyncTask<Long, Void, Void> {
+public class GetReviewsTask extends AsyncTask<Long, Void, ArrayList<ReviewsItem>> {
     private Context mContext;
     private ArrayAdapter<ReviewsItem> mReviewsAdapter;
 
@@ -34,19 +34,19 @@ public class GetReviewsTask extends AsyncTask<Long, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Long... params) {
+    protected ArrayList<ReviewsItem> doInBackground(Long... params) {
         // if no movie id was passed in or details are already available then exit
         if (params.length == 0 || params[0] == 0) {
-            return null;
+            return new ArrayList<>();
         }
 
         // if we get here then we do not yet have the movie details
         // if the network is available, get the details from TMDB
         if(NetworkAvailable()) {
             FetchData fetchData = new FetchData(mContext);
-            fetchData.GetReviews(Long.toString(params[0]));
+            return fetchData.GetReviews(Long.toString(params[0]));
         }
-        return null;
+        return new ArrayList<>();
     }
 
     protected void onPostExecute(ArrayList<ReviewsItem> result) {

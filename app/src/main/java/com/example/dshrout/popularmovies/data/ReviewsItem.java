@@ -7,12 +7,10 @@ public class ReviewsItem {
     public String id;
     public String author;
     public String content;
-    public String url;
 
     public ReviewsItem() {
         id = "";
         author = "";
         content = "";
-        url = "";
     }
 }

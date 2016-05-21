@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/moviedetail_review"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:paddingLeft="12dp"
-android:paddingRight="12dp"
-android:paddingTop="15dp"
-android:paddingBottom="5dp"
-android:background="#000000"
-android:textColor="#fff" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/moviedetail_reviews"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <TextView android:id="@+id/moviedetail_review_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="5dp"
+        android:background="#000000"
+        android:textColor="#fff" />
+
+    <com.example.dshrout.popularmovies.widgets.ExpandableTextView
+        android:id="@+id/moviedetail_summary_content"
+        android:layout_below="@id/moviedetail_review_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="#000000"
+        android:textColor="#fff" />
+
+    <TextView android:id="@+id/moviedetail_review_hrule"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/moviedetail_summary_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="#a1a1a1" />
+
+</RelativeLayout>

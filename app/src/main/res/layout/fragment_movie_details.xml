@@ -91,7 +91,7 @@
                 android:textColor="#fff"
                 android:background="#000000" />
 
-            <TextView android:id="@+id/moviedetail_summary"
+            <TextView android:id="@+id/moviedetail_summary_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/moviedetail_poster"
@@ -105,18 +105,29 @@
             <TextView android:id="@+id/moviedetail_hrule"
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
-                android:layout_below="@id/moviedetail_summary"
+                android:layout_below="@id/moviedetail_summary_content"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:background="#FFB612" />
 
+            <TextView android:id="@+id/moviedetail_reviews_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/moviedetail_hrule"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:background="#000000"
+                android:textColor="#fff" />
+
             <ListView
                 android:id="@+id/listview_reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/moviedetail_hrule"
+                android:layout_below="@id/moviedetail_reviews_heading"
                 android:stretchMode="columnWidth"
                 android:gravity="center"
                 android:verticalSpacing="0dp"

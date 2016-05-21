@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.dshrout.popularmovies.adapters.ReviewsAdapter;
 import com.example.dshrout.popularmovies.asynctasks.GetDetailsTask;
 import com.example.dshrout.popularmovies.asynctasks.GetReviewsTask;
 import com.example.dshrout.popularmovies.data.PopMoviesContract;
@@ -24,6 +25,7 @@ import com.example.dshrout.popularmovies.data.ReviewsItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -68,6 +70,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private TextView mRuntime;
     private TextView mRating;
     private TextView mSummary;
+    private TextView mReviewsHeading;
 
     private ArrayAdapter<ReviewsItem> mReviewsAdapter;
 
@@ -88,13 +91,11 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         mDate = ((TextView) rootView.findViewById(R.id.moviedetail_releasedate));
         mRuntime = ((TextView) rootView.findViewById(R.id.moviedetail_runtime));
         mRating = ((TextView) rootView.findViewById(R.id.moviedetail_userrating));
-        mSummary = ((TextView) rootView.findViewById(R.id.moviedetail_summary));
+        mSummary = ((TextView) rootView.findViewById(R.id.moviedetail_summary_content));
+        mReviewsHeading = ((TextView) rootView.findViewById(R.id.moviedetail_reviews_heading));
 
         // The ArrayAdapter will take data from a source and use it to populate the ListView it's attached to.
-        mReviewsAdapter = new ArrayAdapter<>(getActivity(),
-                        R.layout.fragment_movie_details,
-                        R.id.listview_reviews,
-                        new ArrayList<ReviewsItem>());
+        mReviewsAdapter = new ReviewsAdapter(getActivity(), R.layout.reviews_listitem, new ArrayList<ReviewsItem>());
 
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) rootView.findViewById(R.id.listview_reviews);
@@ -162,6 +163,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         if (overview != null && overview.length() > 0) {
             mSummary.setText(overview);
         }
+
+        mReviewsHeading.setText("REVIEWS:");
     }
 
     @Override
