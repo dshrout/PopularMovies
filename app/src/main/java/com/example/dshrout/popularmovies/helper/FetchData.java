@@ -6,6 +6,8 @@ import android.util.Log;
 import com.example.dshrout.popularmovies.BuildConfig;
 import com.example.dshrout.popularmovies.data.ReviewsItem;
 import com.example.dshrout.popularmovies.data.ReviewsList;
+import com.example.dshrout.popularmovies.data.TrailersItem;
+import com.example.dshrout.popularmovies.data.TrailersList;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -16,7 +18,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by DShrout on 5/19/2016.
@@ -62,6 +63,22 @@ public class FetchData {
                 e.printStackTrace();
             }
             return reviewsItems;
+        }
+
+        return new ArrayList<>();
+    }
+
+    public ArrayList<TrailersItem> GetTrailers(String movieId) {
+        String urlString = TMDB_BASE_URL + "movie/" + movieId + "/videos?api_key=" + BuildConfig.TMDB_API_KEY;
+        String jsonData = getJsonData(urlString);
+        if (jsonData != null && jsonData.length() > 0) {
+            ArrayList<TrailersItem> trailersItems = null;
+            try {
+                trailersItems = (ArrayList<TrailersItem>) new Gson().fromJson(jsonData, TrailersList.class).results;
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
+            return trailersItems;
         }
 
         return new ArrayList<>();

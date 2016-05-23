@@ -19,4 +19,7 @@
     <!-- Display formats -->
     <string name="format_runtime"><xliff:g id="runtime">%1$s</xliff:g>min</string>
     <string name="format_vote_average"><xliff:g id="vote_average">%1$s</xliff:g>/10</string>
+
+    <string name="heading_reviews">REVIEWS:</string>
+    <string name="heading_trailers">TRAILERS:</string>
 </resources>

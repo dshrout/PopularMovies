@@ -16,7 +16,7 @@ import com.example.dshrout.popularmovies.R;
  */
 public class ExpandableTextView extends TextView {
     private static final int DEFAULT_TRIM_LENGTH = 200;
-    private static final String ELLIPSIS = "... [see more]";
+    private static final String ELLIPSIS = "...\n[touch to see more]";
 
     private CharSequence originalText;
     private CharSequence trimmedText;

@@ -15,7 +15,7 @@
         android:background="#000000"
         android:textColor="#fff" />
 
-    <com.example.dshrout.popularmovies.widgets.ExpandableTextView
+    <TextView
         android:id="@+id/moviedetail_summary_content"
         android:layout_below="@id/moviedetail_review_author"
         android:layout_width="wrap_content"

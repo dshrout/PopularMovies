@@ -6,19 +6,19 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import com.example.dshrout.popularmovies.MovieDetailsFragment;
-import com.example.dshrout.popularmovies.data.ReviewsItem;
+import com.example.dshrout.popularmovies.data.TrailersItem;
 import com.example.dshrout.popularmovies.helper.FetchData;
 
 import java.util.ArrayList;
 
 /**
- * Created by DShrout on 5/20/2016.
+ * Created by DShrout on 5/23/2016.
  */
-public class GetReviewsTask extends AsyncTask<Long, Void, ArrayList<ReviewsItem>> {
+public class GetTrailersTask extends AsyncTask<Long, Void, ArrayList<TrailersItem>> {
     private Context mContext;
     private MovieDetailsFragment mFragment;
 
-    public GetReviewsTask(Context context, MovieDetailsFragment fragment) {
+    public GetTrailersTask(Context context, MovieDetailsFragment fragment) {
         mContext = context;
         mFragment = fragment;
     }
@@ -34,7 +34,7 @@ public class GetReviewsTask extends AsyncTask<Long, Void, ArrayList<ReviewsItem>
     }
 
     @Override
-    protected ArrayList<ReviewsItem> doInBackground(Long... params) {
+    protected ArrayList<TrailersItem> doInBackground(Long... params) {
         // if no movie id was passed in or details are already available then exit
         if (params.length == 0 || params[0] == 0) {
             return new ArrayList<>();
@@ -44,43 +44,14 @@ public class GetReviewsTask extends AsyncTask<Long, Void, ArrayList<ReviewsItem>
         // if the network is available, get the details from TMDB
         if(NetworkAvailable()) {
             FetchData fetchData = new FetchData(mContext);
-            return fetchData.GetReviews(Long.toString(params[0]));
+            return fetchData.GetTrailers(Long.toString(params[0]));
         }
         return new ArrayList<>();
     }
 
-    protected void onPostExecute(ArrayList<ReviewsItem> result) {
+    protected void onPostExecute(ArrayList<TrailersItem> result) {
         if (result != null) {
-            mFragment.populateReviewsList(result);
+            mFragment.populateTrailersList(result);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

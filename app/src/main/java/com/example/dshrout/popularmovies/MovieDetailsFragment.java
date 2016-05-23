@@ -2,6 +2,7 @@ package com.example.dshrout.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,20 +13,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.dshrout.popularmovies.adapters.ReviewsAdapter;
 import com.example.dshrout.popularmovies.asynctasks.GetDetailsTask;
 import com.example.dshrout.popularmovies.asynctasks.GetReviewsTask;
+import com.example.dshrout.popularmovies.asynctasks.GetTrailersTask;
 import com.example.dshrout.popularmovies.data.PopMoviesContract;
 import com.example.dshrout.popularmovies.data.ReviewsItem;
+import com.example.dshrout.popularmovies.data.TrailersItem;
+import com.example.dshrout.popularmovies.widgets.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -64,6 +65,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public static final int COL_VOTE_AVERAGE = 10;
     public static final int COL_VOTE_COUNT = 11;
 
+    private View mRootView;
     private TextView mTitle;
     private ImageView mPoster;
     private TextView mDate;
@@ -71,8 +73,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private TextView mRating;
     private TextView mSummary;
     private TextView mReviewsHeading;
-
-    private ArrayAdapter<ReviewsItem> mReviewsAdapter;
+    private TextView mTrailersHeading;
 
     public MovieDetailsFragment() {
     }
@@ -84,25 +85,85 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             mDetailsUri = getArguments().getParcelable(MOVIE_DETAIL_URI);
         }
 
-        View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
-        mTitle = ((TextView) rootView.findViewById(R.id.moviedetail_title));
-        mPoster = ((ImageView) rootView.findViewById(R.id.moviedetail_poster));
-        mDate = ((TextView) rootView.findViewById(R.id.moviedetail_releasedate));
-        mRuntime = ((TextView) rootView.findViewById(R.id.moviedetail_runtime));
-        mRating = ((TextView) rootView.findViewById(R.id.moviedetail_userrating));
-        mSummary = ((TextView) rootView.findViewById(R.id.moviedetail_summary_content));
-        mReviewsHeading = ((TextView) rootView.findViewById(R.id.moviedetail_reviews_heading));
+        mTitle = ((TextView) mRootView.findViewById(R.id.moviedetail_title));
+        mPoster = ((ImageView) mRootView.findViewById(R.id.moviedetail_poster));
+        mDate = ((TextView) mRootView.findViewById(R.id.moviedetail_releasedate));
+        mRuntime = ((TextView) mRootView.findViewById(R.id.moviedetail_runtime));
+        mRating = ((TextView) mRootView.findViewById(R.id.moviedetail_userrating));
+        mSummary = ((TextView) mRootView.findViewById(R.id.moviedetail_summary_content));
+        mReviewsHeading = ((TextView) mRootView.findViewById(R.id.moviedetail_reviews_heading));
+        mTrailersHeading = ((TextView) mRootView.findViewById(R.id.moviedetail_trailers_heading));
 
-        // The ArrayAdapter will take data from a source and use it to populate the ListView it's attached to.
-        mReviewsAdapter = new ReviewsAdapter(getActivity(), R.layout.reviews_listitem, new ArrayList<ReviewsItem>());
+        return mRootView;
+    }
 
-        // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_reviews);
-        listView.setAdapter(mReviewsAdapter);
+    public void populateReviewsList(ArrayList<ReviewsItem> reviews) {
+        LinearLayout layout = (LinearLayout) mRootView.findViewById(R.id.moviedetail_reviews_layout);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
 
+        int position = 0;
+        for(ReviewsItem review: reviews) {
+            boolean zebraStripe = (position++ % 2 == 0);
+            int color = zebraStripe ? Color.BLACK : Color.parseColor("#222222");
+            TextView author = new TextView(getActivity());
+            ExpandableTextView content = new ExpandableTextView(getActivity());
+            TextView hrule = new TextView(getActivity());
 
-        return rootView;
+            author.setText(review.author);
+            author.setTextColor(Color.WHITE);
+            author.setBackgroundColor(color);
+            author.setPadding(12, 15, 12, 5);
+            layout.addView(author, lp);
+
+            content.setText(review.content);
+            content.setTextColor(Color.WHITE);
+            content.setBackgroundColor(color);
+            content.setPadding(12, 12, 15, 25);
+            layout.addView(content, lp);
+
+            hrule.setHeight(2);
+            hrule.setBackgroundColor(Color.parseColor("#a1a1a1"));
+            hrule.setPadding(12, 12, 15, 15);
+            layout.addView(hrule);
+        }
+    }
+
+    public void populateTrailersList(ArrayList<TrailersItem> trailers) {
+        LinearLayout parentLayout = (LinearLayout) mRootView.findViewById(R.id.moviedetail_trailers_layout);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        for(TrailersItem trailer: trailers) {
+            LinearLayout childLayout = new LinearLayout(getActivity());
+            childLayout.setLayoutParams(lp);
+            childLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView icon = new TextView(getActivity());
+            TextView text = new TextView(getActivity());
+
+            icon.setText("\u25BA");
+            icon.setTextColor(Color.parseColor("#cd201f"));
+            icon.setPadding(12, 12, 12, 12);
+            //icon.setTextSize(48);
+            childLayout.addView(icon, lp);
+
+            //text.setText("https://www.youtube.com/watch?v=" + trailer.key);
+            text.setText(trailer.name);
+            text.setTextColor(Color.WHITE);
+            text.setBackgroundColor(Color.BLACK);
+            text.setPadding(12, 12, 12, 12);
+            childLayout.addView(text, lp);
+
+            parentLayout.addView(childLayout);
+        }
+
     }
 
     private void loadMovieDetails(){
@@ -116,7 +177,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
             long movieId = PopMoviesContract.DetailsEntry.getMovieIdFromUri(mDetailsUri);
             new GetDetailsTask(getActivity()).execute(movieId);
-            new GetReviewsTask(getActivity(), mReviewsAdapter).execute(movieId);
+            new GetReviewsTask(getActivity(), this).execute(movieId);
+            new GetTrailersTask(getActivity(), this).execute(movieId);
         } catch (Exception e) {
             Log.e("loadMovieDetails", "Error ", e);
         }
@@ -164,7 +226,9 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             mSummary.setText(overview);
         }
 
-        mReviewsHeading.setText("REVIEWS:");
+        mReviewsHeading.setText(R.string.heading_reviews);
+        mTrailersHeading.setText(R.string.heading_trailers);
+
     }
 
     @Override
