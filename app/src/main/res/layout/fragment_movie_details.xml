@@ -121,7 +121,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingBottom="0dp"
                 android:background="#000000"
                 android:textColor="#fff" />
 
@@ -130,6 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingLeft="12dp"
                 android:layout_below="@id/moviedetail_trailers_heading" />
 
             <TextView android:id="@+id/moviedetail_hrule_1"
@@ -149,7 +150,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingBottom="0dp"
                 android:background="#000000"
                 android:textColor="#fff" />
 

@@ -22,4 +22,8 @@
 
     <string name="heading_reviews">REVIEWS:</string>
     <string name="heading_trailers">TRAILERS:</string>
+    <string name="string_no_reviews">No Reviews Found</string>
+    <string name="string_no_trailers">No Trailers Found</string>
+    <string name="string_youtube_trailer_url">https://www.youtube.com/watch?v=</string>
+    <string name="string_trailer_intent_error">An error occurred while trying to launch the trailer</string>
 </resources>
