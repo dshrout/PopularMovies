@@ -9,6 +9,10 @@
     <string name="pref_sortby_key">sortby</string>
     <string name="pref_sortby_default">popularity</string>
 
+    <string name="key_sortby_popular">popularity</string>
+    <string name="key_sortby_votes">vote_average</string>
+    <string name="key_sortby_favorites">favorites</string>
+
     <string name="pref_sortorder_label">Sort Order</string>
     <string name="pref_sortorder_key">sortorder</string>
     <string name="pref_sortorder_default">desc</string>
@@ -26,6 +30,11 @@
     <string name="string_no_trailers">No Trailers Found</string>
     <string name="string_youtube_trailer_url">https://www.youtube.com/watch?v=</string>
     <string name="string_trailer_intent_error">An error occurred while trying to launch the trailer</string>
-    <string name="adasfdsaf">popular</string>
     <string name="favorite_text">Favorite</string>
+    <string name="unicode_char_play_trailer">►</string>
+    <string name="unicode_char_favorite">✦</string>
+    <string name="color_is_favorite">#FFB612</string>
+    <string name="color_not_favorite">#444444</string>
+    <string name="toast_favorite_removed">Removed from Favorites</string>
+    <string name="toast_favorite_added">Added to Favorites</string>
 </resources>

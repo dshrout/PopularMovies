@@ -26,6 +26,7 @@ public class PopMoviesProvider extends ContentProvider {
 
     static final int POSTERS = 100;
     static final int FAVORITES = 200;
+    static final int FAVORITES_WITH_MOVIE_ID = 201;
     static final int DETAILS = 300;
     static final int DETAILS_WITH_MOVIE_ID = 301;
     static final int REVIEWS = 400;
@@ -42,6 +43,7 @@ public class PopMoviesProvider extends ContentProvider {
 
         // Favorites
         matcher.addURI(authority, PopMoviesContract.PATH_FAVORITES, FAVORITES);
+        matcher.addURI(authority, PopMoviesContract.PATH_FAVORITES + "/movie/#", FAVORITES_WITH_MOVIE_ID);
 
         // Details
         matcher.addURI(authority, PopMoviesContract.PATH_DETAILS, DETAILS);
@@ -68,6 +70,25 @@ public class PopMoviesProvider extends ContentProvider {
 
     private Cursor getReviews(String[] projection, String selection, String[] selectionArgs, String sortColumn) {
         return  popMoviesDbHelper.getReadableDatabase().query(ReviewsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortColumn);
+    }
+
+    @Nullable
+    private Cursor getFavoritesByMovieId(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        try {
+            long movieId = ContentUris.parseId(uri);
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+
+            if (movieId > 0) {
+                queryBuilder.setTables(FavoritesEntry.TABLE_NAME);
+                queryBuilder.appendWhere(FavoritesEntry.COLUMN_MOVIE_ID + " = " + movieId);
+
+                return queryBuilder.query(popMoviesDbHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+            } else {
+                return null;
+            }
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @Nullable
@@ -141,6 +162,8 @@ public class PopMoviesProvider extends ContentProvider {
                 return PostersEntry.CONTENT_TYPE;
             case FAVORITES:
                 return FavoritesEntry.CONTENT_TYPE;
+            case FAVORITES_WITH_MOVIE_ID:
+                return FavoritesEntry.CONTENT_ITEM_TYPE;
             case DETAILS:
                 return DetailsEntry.CONTENT_TYPE;
             case DETAILS_WITH_MOVIE_ID:
@@ -181,6 +204,9 @@ public class PopMoviesProvider extends ContentProvider {
                 break;
             case FAVORITES:
                 cursor = getFavorites(projection, selection, selectionArgs, sortBy);
+                break;
+            case FAVORITES_WITH_MOVIE_ID:
+                cursor = getFavoritesByMovieId(uri, projection, selection, selectionArgs, sortBy);
                 break;
             case DETAILS:
                 cursor = getDetails(projection, selection, selectionArgs, sortBy);

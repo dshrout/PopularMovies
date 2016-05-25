@@ -95,12 +95,12 @@
             <TextView android:id="@+id/moviedetail_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
+                android:gravity="center_horizontal"
+                android:textSize="64sp"
+                android:paddingLeft="8dp"
                 android:layout_toRightOf="@id/moviedetail_poster"
                 android:layout_toEndOf="@id/moviedetail_poster"
                 android:layout_below="@id/moviedetail_userrating"
-                android:textStyle="bold"
-                android:textColor="#fff"
                 android:background="#000000" />
 
             <TextView android:id="@+id/moviedetail_summary_content"

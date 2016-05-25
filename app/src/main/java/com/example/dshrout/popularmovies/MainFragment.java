@@ -75,15 +75,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         //noinspection SimplifiableIfStatement
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (id == R.id.action_popular) {
-            sharedPrefs.edit().putString(getActivity().getString(R.string.pref_sortby_key), "popularity").apply();
+            sharedPrefs.edit().putString(getString(R.string.pref_sortby_key), getString(R.string.key_sortby_popular)).apply();
             updateMovieCards();
             return true;
         } else if (id == R.id.action_user_votes) {
-            sharedPrefs.edit().putString(getActivity().getString(R.string.pref_sortby_key), "vote_average").apply();
+            sharedPrefs.edit().putString(getString(R.string.pref_sortby_key), getString(R.string.key_sortby_votes)).apply();
             updateMovieCards();
             return true;
         } else if (id == R.id.action_favorites) {
-            sharedPrefs.edit().putString(getActivity().getString(R.string.pref_sortby_key), "favorites").apply();
+            sharedPrefs.edit().putString(getString(R.string.pref_sortby_key), getString(R.string.key_sortby_favorites)).apply();
             updateMovieCards();
             return true;
         }
@@ -135,7 +135,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         String sortBy = sharedPrefs.getString(getActivity().getString(R.string.pref_sortby_key), getActivity().getString(R.string.pref_sortby_default));
         Uri postersUri;
 
-        if (sortBy == "favorites") {
+        if (sortBy.equals(getString(R.string.key_sortby_favorites))) {
             postersUri = PopMoviesContract.FavoritesEntry.CONTENT_URI;
         } else {
             postersUri = PopMoviesContract.PostersEntry.CONTENT_URI;

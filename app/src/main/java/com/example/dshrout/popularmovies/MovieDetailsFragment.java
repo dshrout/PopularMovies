@@ -88,12 +88,21 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public void onClick(View view) {
         try {
             if (view.getTag(TRAILER_KEY) != null) {
-                String url = (String)view.getTag();
+                String url = (String)view.getTag(TRAILER_KEY);
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
-            } else {
-                Toast.makeText(getActivity(), "You clicked Favorite", Toast.LENGTH_LONG).show();
+            } else if(view.getTag(FAVORITE_KEY) != null) {
+                int movieId = Integer.parseInt((String)view.getTag(FAVORITE_KEY));
+                if (mFavorite.getCurrentTextColor() == Color.parseColor(getString(R.string.color_is_favorite))) {
+                    // change the color to show it's no longer a favorite
+                    mFavorite.setTextColor(Color.parseColor(getString(R.string.color_not_favorite)));
+                    Toast.makeText(getActivity(), R.string.toast_favorite_removed, Toast.LENGTH_SHORT).show();
+                } else {
+                    // change the color to show it's now a favorite
+                    mFavorite.setTextColor(Color.parseColor(getString(R.string.color_is_favorite)));
+                    Toast.makeText(getActivity(), R.string.toast_favorite_added, Toast.LENGTH_SHORT).show();
+                }
             }
         } catch (Exception e) {
             Toast.makeText(getActivity(), R.string.string_trailer_intent_error, Toast.LENGTH_LONG).show();
@@ -134,7 +143,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 TextView icon = new TextView(getActivity());
                 TextView text = new TextView(getActivity());
 
-                icon.setText("\u25BA");
+                icon.setText(R.string.unicode_char_play_trailer);
                 icon.setTextColor(Color.parseColor("#cd201f"));
                 icon.setTextSize(42);
                 icon.setPadding(12, 0, 12, 0);
@@ -146,7 +155,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 text.setText(trailer.name);
                 text.setTextColor(Color.WHITE);
                 text.setTextSize(18);
-                text.setPadding(12, 0, 12, 0);
+                text.setPadding(48, 2, 12, 0);
                 text.setTag(TRAILER_KEY, getResources().getString(R.string.string_youtube_trailer_url) + trailer.key);
                 text.setClickable(true);
                 text.setOnClickListener(this);
@@ -269,7 +278,18 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         mRuntime.setText(String.format(getResources().getString(R.string.format_runtime), Integer.toString(cursor.getInt(COL_RUNTIME)).trim()));
         mRating.setText(String.format(getResources().getString(R.string.format_vote_average), cursor.getString(COL_VOTE_AVERAGE).trim()));
 
-        mFavorite.setText(R.string.favorite_text);
+        mFavorite.setText(R.string.unicode_char_favorite);
+        // light the star if this is a favorite
+        int movieId = cursor.getInt(COL_MOVIE_ID);
+        Cursor favoritesCursor = getActivity().getContentResolver().query(PopMoviesContract.FavoritesEntry.buildFavoritesByMovieIdUri(movieId), null, PopMoviesContract.FavoritesEntry.COLUMN_MOVIE_ID + " = " + movieId, null, null);
+        if (favoritesCursor != null && favoritesCursor.moveToFirst()) {
+            // this is a favorite
+            mFavorite.setTextColor(Color.parseColor(getString(R.string.color_is_favorite)));
+        } else {
+            mFavorite.setTextColor(Color.parseColor(getString(R.string.color_not_favorite)));
+        }
+        if (favoritesCursor != null) {favoritesCursor.close();}
+        // setup the tag and click event so the user can add/remove this as a favorite
         mFavorite.setTag(FAVORITE_KEY, cursor.getString(COL_MOVIE_ID));
         mFavorite.setClickable(true);
         mFavorite.setOnClickListener(this);

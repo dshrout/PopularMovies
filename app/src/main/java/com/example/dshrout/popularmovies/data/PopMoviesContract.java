@@ -51,6 +51,14 @@ public class PopMoviesContract {
             // content://com.example.dshrout.popularmovies.app/favorites/[id]
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static Uri buildFavoritesByMovieIdUri(int movie_id) {
+            // content://com.example.dshrout.popularmovies.app/favorites/movie/[movie_id]
+            return CONTENT_URI.buildUpon()
+                    .appendPath("movie")
+                    .appendPath(Integer.toString(movie_id))
+                    .build();
+        }
     }
 
     // The details table will be used for the detail fragment.
