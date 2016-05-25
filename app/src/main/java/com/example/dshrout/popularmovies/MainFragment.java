@@ -82,6 +82,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             sharedPrefs.edit().putString(getActivity().getString(R.string.pref_sortby_key), "vote_average").apply();
             updateMovieCards();
             return true;
+        } else if (id == R.id.action_favorites) {
+            sharedPrefs.edit().putString(getActivity().getString(R.string.pref_sortby_key), "favorites").apply();
+            updateMovieCards();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -122,15 +126,20 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void updateMovieCards(){
         new GetPostersTask(getActivity()).execute();
+        getLoaderManager().restartLoader(POPMOVIES_LOADER, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        // get which category to sort by from the user settings
         String sortBy = sharedPrefs.getString(getActivity().getString(R.string.pref_sortby_key), getActivity().getString(R.string.pref_sortby_default));
-        // build the URI we'll query with
-        Uri postersUri = PopMoviesContract.PostersEntry.CONTENT_URI;
+        Uri postersUri;
+
+        if (sortBy == "favorites") {
+            postersUri = PopMoviesContract.FavoritesEntry.CONTENT_URI;
+        } else {
+            postersUri = PopMoviesContract.PostersEntry.CONTENT_URI;
+        }
 
         return new CursorLoader(getActivity(), postersUri, POSTERS_COLUMNS, null, null, null);
     }

@@ -15,6 +15,7 @@ public class PopMoviesContract {
     public static final String PATH_POSTERS = "posters";
     public static final String PATH_DETAILS = "details";
     public static final String PATH_REVIEWS = "reviews";
+    public static final String PATH_FAVORITES = "favorites";
 
     // The posters table will be used for the main activity.
     // We'll only fetch what we need to show and sort the posters.
@@ -30,6 +31,24 @@ public class PopMoviesContract {
 
         public static Uri buildPosterUri(long id) {
             // content://com.example.dshrout.popularmovies.app/posters/[id]
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    // The favorites table will be used for the main activity.
+    // We'll only fetch what we need to show and sort the posters.
+    // We'll need the movie id to pass to the details fragment when the user clicks a poster.
+    public static final class FavoritesEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVORITES).build();
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
+
+        public static final String TABLE_NAME = "favorites";
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+        public static final String COLUMN_POSTER_PATH = "poster_path";
+
+        public static Uri buildFavoritesUri(long id) {
+            // content://com.example.dshrout.popularmovies.app/favorites/[id]
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }

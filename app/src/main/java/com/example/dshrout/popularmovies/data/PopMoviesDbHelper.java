@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.dshrout.popularmovies.data.PopMoviesContract.PostersEntry;
+import com.example.dshrout.popularmovies.data.PopMoviesContract.FavoritesEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.DetailsEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.ReviewsEntry;
 
@@ -25,6 +26,11 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
                 PostersEntry._ID + " INTEGER PRIMARY KEY, " +
                 PostersEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
                 PostersEntry.COLUMN_POSTER_PATH + " TEXT);";
+
+        final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoritesEntry.TABLE_NAME + " (" +
+                FavoritesEntry._ID + " INTEGER PRIMARY KEY, " +
+                FavoritesEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE NOT NULL, " +
+                FavoritesEntry.COLUMN_POSTER_PATH + " TEXT);";
 
         final String SQL_CREATE_DETAILS_TABLE = "CREATE TABLE " + DetailsEntry.TABLE_NAME + " (" +
                 DetailsEntry._ID + " INTEGER PRIMARY KEY, " +
@@ -49,6 +55,7 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
 
         // now actually create the tables
         sqLiteDatabase.execSQL(SQL_CREATE_POSTERS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_FAVORITES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_DETAILS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_REVIEWS_TABLE);
     }
@@ -62,6 +69,7 @@ public class PopMoviesDbHelper extends SQLiteOpenHelper {
         // If you want to update the schema without wiping data, commenting out the next 2 lines
         // should be your top priority before modifying this method.
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PostersEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FavoritesEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DetailsEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ReviewsEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);

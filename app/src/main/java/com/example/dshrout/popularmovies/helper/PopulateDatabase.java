@@ -45,6 +45,28 @@ public class PopulateDatabase {
     }
 
     @Nullable
+    public boolean addToFavorites(String favoritesData) {
+        try {
+
+        } catch (Exception e) {
+            Log.e("addToFavorites", "Exception", e);
+            return false;
+        }
+        return true;
+    }
+
+    @Nullable
+    public boolean removeFromFavorites(String movieId) {
+        try {
+
+        } catch (Exception e) {
+            Log.e("removeFromFavorites", "Exception", e);
+            return false;
+        }
+        return true;
+    }
+
+    @Nullable
     public void populateDetailsTable(String detailsData) {
         try {
             ContentValues[] detailsArray = new ContentValues[1];

@@ -24,6 +24,7 @@ public class TestDb extends AndroidTestCase {
         // create a hash set of all the tables we wish to create
         final HashSet<String> tableNames = new HashSet<>();
         tableNames.add(PopMoviesContract.PostersEntry.TABLE_NAME);
+        tableNames.add(PopMoviesContract.FavoritesEntry.TABLE_NAME);
         tableNames.add(PopMoviesContract.DetailsEntry.TABLE_NAME);
         tableNames.add(PopMoviesContract.ReviewsEntry.TABLE_NAME);
 
@@ -32,6 +33,12 @@ public class TestDb extends AndroidTestCase {
         postersColumns.add(PopMoviesContract.PostersEntry._ID);
         postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_MOVIE_ID);
         postersColumns.add(PopMoviesContract.PostersEntry.COLUMN_POSTER_PATH);
+
+        // create a hash set of column names for the Poster table
+        final HashSet<String> favoritesColumns = new HashSet<>();
+        favoritesColumns.add(PopMoviesContract.FavoritesEntry._ID);
+        favoritesColumns.add(PopMoviesContract.FavoritesEntry.COLUMN_MOVIE_ID);
+        favoritesColumns.add(PopMoviesContract.FavoritesEntry.COLUMN_POSTER_PATH);
 
         // create a hash set of column names for the Details table
         final HashSet<String> detailsColumns = new HashSet<>();
@@ -75,6 +82,7 @@ public class TestDb extends AndroidTestCase {
 
         // run the column tests for each table
         testTableColumns(db, PopMoviesContract.PostersEntry.TABLE_NAME, postersColumns);
+        testTableColumns(db, PopMoviesContract.FavoritesEntry.TABLE_NAME, favoritesColumns);
         testTableColumns(db, PopMoviesContract.DetailsEntry.TABLE_NAME, detailsColumns);
         testTableColumns(db, PopMoviesContract.ReviewsEntry.TABLE_NAME, reviewsColumns);
 

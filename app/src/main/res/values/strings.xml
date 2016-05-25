@@ -1,9 +1,9 @@
 <resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Popular Movies</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_popular">Popular</string>
     <string name="action_user_votes">User Votes</string>
+    <string name="action_favorites">Favorites</string>
 
     <string name="pref_sortby_label">Sort By</string>
     <string name="pref_sortby_key">sortby</string>
@@ -26,4 +26,6 @@
     <string name="string_no_trailers">No Trailers Found</string>
     <string name="string_youtube_trailer_url">https://www.youtube.com/watch?v=</string>
     <string name="string_trailer_intent_error">An error occurred while trying to launch the trailer</string>
+    <string name="adasfdsaf">popular</string>
+    <string name="favorite_text">Favorite</string>
 </resources>

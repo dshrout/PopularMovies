@@ -37,6 +37,8 @@ import java.util.ArrayList;
  */
 public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     private static final int DETAILS_LOADER = 1001;
+    private static final int TRAILER_KEY = R.string.string_youtube_trailer_url;
+    private static final int FAVORITE_KEY = R.id.moviedetail_favorite;
     private Uri mDetailsUri;
     static final String MOVIE_DETAIL_URI = "URI";
 
@@ -74,6 +76,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private TextView mDate;
     private TextView mRuntime;
     private TextView mRating;
+    private TextView mFavorite;
     private TextView mSummary;
     private TextView mReviewsHeading;
     private TextView mTrailersHeading;
@@ -84,10 +87,14 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onClick(View view) {
         try {
-            String url = (String)view.getTag();
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
+            if (view.getTag(TRAILER_KEY) != null) {
+                String url = (String)view.getTag();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            } else {
+                Toast.makeText(getActivity(), "You clicked Favorite", Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Toast.makeText(getActivity(), R.string.string_trailer_intent_error, Toast.LENGTH_LONG).show();
         }
@@ -107,6 +114,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         mDate = ((TextView) mRootView.findViewById(R.id.moviedetail_releasedate));
         mRuntime = ((TextView) mRootView.findViewById(R.id.moviedetail_runtime));
         mRating = ((TextView) mRootView.findViewById(R.id.moviedetail_userrating));
+        mFavorite = ((TextView) mRootView.findViewById(R.id.moviedetail_favorite));
         mSummary = ((TextView) mRootView.findViewById(R.id.moviedetail_summary_content));
         mReviewsHeading = ((TextView) mRootView.findViewById(R.id.moviedetail_reviews_heading));
         mTrailersHeading = ((TextView) mRootView.findViewById(R.id.moviedetail_trailers_heading));
@@ -120,7 +128,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         if (!trailers.isEmpty()) {
             for(TrailersItem trailer: trailers) {
                 LinearLayout childLayout = new LinearLayout(getActivity());
-                //childLayout.setLayoutParams(lp);
                 childLayout.setOrientation(LinearLayout.HORIZONTAL);
                 childLayout.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -131,7 +138,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 icon.setTextColor(Color.parseColor("#cd201f"));
                 icon.setTextSize(42);
                 icon.setPadding(12, 0, 12, 0);
-                icon.setTag(getResources().getString(R.string.string_youtube_trailer_url) + trailer.key);
+                icon.setTag(TRAILER_KEY, getResources().getString(R.string.string_youtube_trailer_url) + trailer.key);
                 icon.setClickable(true);
                 icon.setOnClickListener(this);
                 childLayout.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -140,7 +147,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 text.setTextColor(Color.WHITE);
                 text.setTextSize(18);
                 text.setPadding(12, 0, 12, 0);
-                text.setTag(getResources().getString(R.string.string_youtube_trailer_url) + trailer.key);
+                text.setTag(TRAILER_KEY, getResources().getString(R.string.string_youtube_trailer_url) + trailer.key);
                 text.setClickable(true);
                 text.setOnClickListener(this);
                 childLayout.addView(text, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -149,7 +156,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             }
         } else {
             TextView noTrailers = new TextView(getActivity());
-
             noTrailers.setText(R.string.string_no_trailers);
             noTrailers.setTextColor(Color.parseColor("#FFB612"));
             noTrailers.setTextSize(24);
@@ -262,6 +268,11 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
         mRuntime.setText(String.format(getResources().getString(R.string.format_runtime), Integer.toString(cursor.getInt(COL_RUNTIME)).trim()));
         mRating.setText(String.format(getResources().getString(R.string.format_vote_average), cursor.getString(COL_VOTE_AVERAGE).trim()));
+
+        mFavorite.setText(R.string.favorite_text);
+        mFavorite.setTag(FAVORITE_KEY, cursor.getString(COL_MOVIE_ID));
+        mFavorite.setClickable(true);
+        mFavorite.setOnClickListener(this);
 
         String overview = cursor.getString(COL_OVERVIEW);
         if (overview != null && overview.length() > 0) {

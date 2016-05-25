@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.example.dshrout.popularmovies.data.PopMoviesContract.PostersEntry;
+import com.example.dshrout.popularmovies.data.PopMoviesContract.FavoritesEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.DetailsEntry;
 import com.example.dshrout.popularmovies.data.PopMoviesContract.ReviewsEntry;
 
@@ -24,10 +25,11 @@ public class PopMoviesProvider extends ContentProvider {
     private PopMoviesDbHelper popMoviesDbHelper;
 
     static final int POSTERS = 100;
-    static final int DETAILS = 200;
-    static final int DETAILS_WITH_MOVIE_ID = 201;
-    static final int REVIEWS = 300;
-    static final int REVIEWS_WITH_MOVIE_ID = 301;
+    static final int FAVORITES = 200;
+    static final int DETAILS = 300;
+    static final int DETAILS_WITH_MOVIE_ID = 301;
+    static final int REVIEWS = 400;
+    static final int REVIEWS_WITH_MOVIE_ID = 401;
 
     private static final UriMatcher _uriMatcher = buildUriMatcher();
     static UriMatcher buildUriMatcher() {
@@ -37,6 +39,9 @@ public class PopMoviesProvider extends ContentProvider {
 
         // Posters
         matcher.addURI(authority, PopMoviesContract.PATH_POSTERS, POSTERS);
+
+        // Favorites
+        matcher.addURI(authority, PopMoviesContract.PATH_FAVORITES, FAVORITES);
 
         // Details
         matcher.addURI(authority, PopMoviesContract.PATH_DETAILS, DETAILS);
@@ -51,6 +56,10 @@ public class PopMoviesProvider extends ContentProvider {
 
     private Cursor getPosters(String[] projection, String selection, String[] selectionArgs, String sortColumn) {
         return  popMoviesDbHelper.getReadableDatabase().query(PostersEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortColumn);
+    }
+
+    private Cursor getFavorites(String[] projection, String selection, String[] selectionArgs, String sortColumn) {
+        return  popMoviesDbHelper.getReadableDatabase().query(FavoritesEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortColumn);
     }
 
     private Cursor getDetails(String[] projection, String selection, String[] selectionArgs, String sortColumn) {
@@ -130,6 +139,8 @@ public class PopMoviesProvider extends ContentProvider {
         switch (match) {
             case POSTERS:
                 return PostersEntry.CONTENT_TYPE;
+            case FAVORITES:
+                return FavoritesEntry.CONTENT_TYPE;
             case DETAILS:
                 return DetailsEntry.CONTENT_TYPE;
             case DETAILS_WITH_MOVIE_ID:
@@ -167,6 +178,9 @@ public class PopMoviesProvider extends ContentProvider {
         {
             case POSTERS:
                 cursor = getPosters(projection, selection, selectionArgs, sortBy);
+                break;
+            case FAVORITES:
+                cursor = getFavorites(projection, selection, selectionArgs, sortBy);
                 break;
             case DETAILS:
                 cursor = getDetails(projection, selection, selectionArgs, sortBy);
@@ -206,6 +220,14 @@ public class PopMoviesProvider extends ContentProvider {
                 long id = database.insert(PostersEntry.TABLE_NAME, null, values);
                 if (id > 0)
                     returnUri = PostersEntry.buildPosterUri(id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case FAVORITES: {
+                long id = database.insert(FavoritesEntry.TABLE_NAME, null, values);
+                if (id > 0)
+                    returnUri = FavoritesEntry.buildFavoritesUri(id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -251,6 +273,9 @@ public class PopMoviesProvider extends ContentProvider {
             case POSTERS:
                 rowsDeleted = db.delete(PostersEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case FAVORITES:
+                rowsDeleted = db.delete(FavoritesEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case DETAILS:
                 rowsDeleted = db.delete(DetailsEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -285,6 +310,9 @@ public class PopMoviesProvider extends ContentProvider {
         {
             case POSTERS:
                 rowsUpdated = db.update(PostersEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case FAVORITES:
+                rowsUpdated = db.update(FavoritesEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case DETAILS_WITH_MOVIE_ID:
                 rowsUpdated = db.update(DetailsEntry.TABLE_NAME, values, selection, selectionArgs);
@@ -329,6 +357,27 @@ public class PopMoviesProvider extends ContentProvider {
 
                         statement.clearBindings();
                         statement.bindLong(2, value.getAsLong(PostersEntry.COLUMN_MOVIE_ID));
+                        statement.bindString(3, posterPath != null ? posterPath : "");
+                        if (statement.executeInsert() != -1) {
+                            ++insertCount;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                break;
+            case FAVORITES:
+                db.delete(FavoritesEntry.TABLE_NAME, null, null);
+                sql = "INSERT OR IGNORE INTO " + FavoritesEntry.TABLE_NAME + " VALUES (?,?,?);";
+                statement = db.compileStatement(sql);
+                db.beginTransaction();
+                try {
+                    for (ContentValues value : values) {
+                        String posterPath = value.getAsString(FavoritesEntry.COLUMN_POSTER_PATH);
+
+                        statement.clearBindings();
+                        statement.bindLong(2, value.getAsLong(FavoritesEntry.COLUMN_MOVIE_ID));
                         statement.bindString(3, posterPath != null ? posterPath : "");
                         if (statement.executeInsert() != -1) {
                             ++insertCount;
