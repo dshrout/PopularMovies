@@ -29,6 +29,7 @@ import com.example.dshrout.popularmovies.data.PopMoviesContract;
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int POPMOVIES_LOADER = 1000;
     private PostersCursorAdapter mPostersCursorAdapter;
+    private View mRootView;
 
     private static final String[] POSTERS_COLUMNS = {
         PopMoviesContract.PostersEntry._ID,
@@ -50,7 +51,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public interface Callback {
         public void onItemSelected(Uri detailsUri);
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // get the db populated
         updateMovieCards();
@@ -101,7 +101,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         mPostersCursorAdapter = new PostersCursorAdapter(getActivity(), null, 0);
 
         // attach adapter to view
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
+        GridView gridView = (GridView) mRootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(mPostersCursorAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,7 +115,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        return rootView;
+
+
+        return mRootView;
     }
 
     @Override

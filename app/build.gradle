@@ -18,7 +18,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'TMDB_API_KEY', "\"\""  // TODO: remove this key before publishing to github
+        it.buildConfigField 'String', 'TMDB_API_KEY', "\"bfaf98a2c85c264e97326dbadfe63a1e\""  // TODO: remove this key before publishing to github
     }
     sourceSets {
         main {

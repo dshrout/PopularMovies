@@ -37,4 +37,5 @@
     <string name="color_not_favorite">#444444</string>
     <string name="toast_favorite_removed">Removed from Favorites</string>
     <string name="toast_favorite_added">Added to Favorites</string>
+    <string name="toast_unknown_error">An unknown error occurred. Please try again.</string>
 </resources>

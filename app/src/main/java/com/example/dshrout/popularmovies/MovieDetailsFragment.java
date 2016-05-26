@@ -1,5 +1,6 @@
 package com.example.dshrout.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -81,6 +82,9 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private TextView mReviewsHeading;
     private TextView mTrailersHeading;
 
+    // this will be used to populate the poster imageview and add a movie to favorites
+    private String mPosterPath;
+
     public MovieDetailsFragment() {
     }
 
@@ -93,15 +97,33 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 i.setData(Uri.parse(url));
                 startActivity(i);
             } else if(view.getTag(FAVORITE_KEY) != null) {
+                boolean addToFavorites = (mFavorite.getCurrentTextColor() == Color.parseColor(getString(R.string.color_not_favorite)));
                 int movieId = Integer.parseInt((String)view.getTag(FAVORITE_KEY));
-                if (mFavorite.getCurrentTextColor() == Color.parseColor(getString(R.string.color_is_favorite))) {
-                    // change the color to show it's no longer a favorite
-                    mFavorite.setTextColor(Color.parseColor(getString(R.string.color_not_favorite)));
-                    Toast.makeText(getActivity(), R.string.toast_favorite_removed, Toast.LENGTH_SHORT).show();
+
+                if (addToFavorites) {
+                    ContentValues favoriteValues = new ContentValues();
+                    favoriteValues.put(PopMoviesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieId);
+                    favoriteValues.put(PopMoviesContract.FavoritesEntry.COLUMN_POSTER_PATH, mPosterPath);
+                    try {
+                        getActivity().getContentResolver().insert(PopMoviesContract.FavoritesEntry.CONTENT_URI, favoriteValues);
+                        // change the color to show it's now a favorite
+                        mFavorite.setTextColor(Color.parseColor(getString(R.string.color_is_favorite)));
+                        Toast.makeText(getActivity(), R.string.toast_favorite_added, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.e("loadMovieDetails", "Error ", e);
+                        Toast.makeText(getActivity(), R.string.toast_unknown_error, Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    // change the color to show it's now a favorite
-                    mFavorite.setTextColor(Color.parseColor(getString(R.string.color_is_favorite)));
-                    Toast.makeText(getActivity(), R.string.toast_favorite_added, Toast.LENGTH_SHORT).show();
+                    int rowsDeleted = getActivity().getContentResolver().delete(PopMoviesContract.FavoritesEntry.CONTENT_URI,
+                                                                                PopMoviesContract.FavoritesEntry.COLUMN_MOVIE_ID + "=?",
+                                                                                new String[]{Integer.toString(movieId)});
+                    if (rowsDeleted > 0) {
+                        // change the color to show it's no longer a favorite
+                        mFavorite.setTextColor(Color.parseColor(getString(R.string.color_not_favorite)));
+                        Toast.makeText(getActivity(), R.string.toast_favorite_removed, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.toast_unknown_error, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         } catch (Exception e) {
@@ -229,6 +251,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 Intent intent = getActivity().getIntent();
                 if (intent != null && intent.getData() != null) {
                     mDetailsUri = intent.getData();
+                } else {
+                    return;
                 }
             }
 
@@ -263,9 +287,9 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
         mTitle.setText(cursor.getString(COL_TITLE));
 
-        String posterPath = cursor.getString(COL_POSTER_PATH);
-        if (posterPath != null && posterPath.length() > 0) {
-            Picasso.with(getActivity()).load(TMDB_IMAGE_PATH + posterPath).into(mPoster);
+        mPosterPath = cursor.getString(COL_POSTER_PATH);
+        if (mPosterPath != null && mPosterPath.length() > 0) {
+            Picasso.with(getActivity()).load(TMDB_IMAGE_PATH + mPosterPath).into(mPoster);
         } else {
             mPoster.setImageResource(R.drawable.no_image_found);
         }
