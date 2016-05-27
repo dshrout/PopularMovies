@@ -29,7 +29,10 @@ import com.example.dshrout.popularmovies.data.PopMoviesContract;
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int POPMOVIES_LOADER = 1000;
     private PostersCursorAdapter mPostersCursorAdapter;
-    private View mRootView;
+    private GridView mGridView;
+    private int mPosition = -1;
+
+    private static final String SELECTED_KEY = "SELECTED_ITEM_INDEX";
 
     private static final String[] POSTERS_COLUMNS = {
         PopMoviesContract.PostersEntry._ID,
@@ -92,7 +95,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // get the db populated
         updateMovieCards();
@@ -101,10 +104,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         mPostersCursorAdapter = new PostersCursorAdapter(getActivity(), null, 0);
 
         // attach adapter to view
-        GridView gridView = (GridView) mRootView.findViewById(R.id.gridview_movies);
-        gridView.setAdapter(mPostersCursorAdapter);
+        mGridView = (GridView) rootView.findViewById(R.id.gridview_movies);
+        mGridView.setAdapter(mPostersCursorAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long id) {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
@@ -112,12 +115,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     Uri detailsUri = PopMoviesContract.DetailsEntry.buildDetailsByMovieIdUri(cursor.getInt(COL_MOVIE_ID));
                     ((Callback) getActivity()).onItemSelected(detailsUri);
                 }
+                mPosition = position;
             }
         });
 
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
 
-
-        return mRootView;
+        return rootView;
     }
 
     @Override
@@ -129,6 +135,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private void updateMovieCards(){
         new GetPostersTask(getActivity()).execute();
         getLoaderManager().restartLoader(POPMOVIES_LOADER, null, this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != GridView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -149,6 +163,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mPostersCursorAdapter.swapCursor(cursor);
+        if (mPosition != GridView.INVALID_POSITION) {
+            mGridView.smoothScrollToPosition(mPosition);
+        }
     }
 
     @Override

@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
     private final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane = false;
-    public boolean startingUp = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
