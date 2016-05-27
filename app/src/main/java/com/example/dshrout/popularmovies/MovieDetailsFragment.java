@@ -40,6 +40,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private static final int DETAILS_LOADER = 1001;
     private static final int TRAILER_KEY = R.string.string_youtube_trailer_url;
     private static final int FAVORITE_KEY = R.id.moviedetail_favorite;
+    private static final int PLAY_TRAILER_ICON_SIZE = 42;
     private Uri mDetailsUri;
     static final String MOVIE_DETAIL_URI = "URI";
 
@@ -167,7 +168,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
                 icon.setText(R.string.unicode_char_play_trailer);
                 icon.setTextColor(Color.parseColor("#cd201f"));
-                icon.setTextSize(42);
+                icon.setTextSize(PLAY_TRAILER_ICON_SIZE);
                 icon.setPadding(12, 0, 12, 0);
                 icon.setTag(TRAILER_KEY, getResources().getString(R.string.string_youtube_trailer_url) + trailer.key);
                 icon.setClickable(true);

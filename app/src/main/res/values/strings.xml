@@ -7,10 +7,10 @@
 
     <string name="pref_sortby_label">Sort By</string>
     <string name="pref_sortby_key">sortby</string>
-    <string name="pref_sortby_default">popularity</string>
+    <string name="pref_sortby_default">popular</string>
 
-    <string name="key_sortby_popular">popularity</string>
-    <string name="key_sortby_votes">vote_average</string>
+    <string name="key_sortby_popular">popular</string>
+    <string name="key_sortby_votes">top_rated</string>
     <string name="key_sortby_favorites">favorites</string>
 
     <string name="pref_sortorder_label">Sort Order</string>

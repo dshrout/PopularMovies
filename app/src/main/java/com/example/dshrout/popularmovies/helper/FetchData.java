@@ -33,10 +33,8 @@ public class FetchData {
     }
 
     public void GetPosters(String sortBy) {
-        String urlString = TMDB_BASE_URL + "discover/movie?" +
-                "sort_by=" + sortBy + ".desc" +
-                "&api_key=" + BuildConfig.TMDB_API_KEY +
-                "&vote_count.gte=5";
+        String urlString = TMDB_BASE_URL + "movie/" + sortBy +
+                "?api_key=" + BuildConfig.TMDB_API_KEY;
         String jsonData = getJsonData(urlString);
         if (jsonData != null && jsonData.length() > 0) {
             mPopDb.populatePostersTable(jsonData);
